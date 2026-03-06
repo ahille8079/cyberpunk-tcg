@@ -1,5 +1,5 @@
 /**
- * Cyberpunk "Jack In" glitch effect — fullscreen visual glitch with
+ * ripperdeck "Jack In" glitch effect — fullscreen visual glitch with
  * screen shake, RGB channel splitting, scanlines, and flicker.
  */
 

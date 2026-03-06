@@ -25,11 +25,11 @@ const rajdhani = Rajdhani({
 
 export const metadata: Metadata = {
   title: {
-    default: "Cyberpunk TCG Deckbuilder",
-    template: "%s | Cyberpunk TCG",
+    default: "ripperdeck — Cyberpunk 2077 TCG Deckbuilder",
+    template: "%s | ripperdeck",
   },
   description:
-    "Build your crew. Run your gigs. The deckbuilder for the Cyberpunk 2077 Trading Card Game.",
+    "ripperdeck — the deckbuilder for the Cyberpunk 2077 Trading Card Game. Build your crew. Run your gigs.",
 };
 
 export default function RootLayout({

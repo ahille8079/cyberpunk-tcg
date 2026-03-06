@@ -5,7 +5,17 @@ import { useAuth } from "@/lib/auth";
 import { useLocalDecks } from "./use-local-decks";
 import { saveCloudDeck } from "@/lib/supabase/deck-service";
 
-const MIGRATION_FLAG = "cyberpunk-tcg-migration-done";
+const MIGRATION_FLAG = "ripperdeck-migration-done";
+const OLD_MIGRATION_FLAG = "cyberpunk-tcg-migration-done";
+
+// Carry over old migration flag
+if (typeof window !== "undefined") {
+  const oldFlag = localStorage.getItem(OLD_MIGRATION_FLAG);
+  if (oldFlag && !localStorage.getItem(MIGRATION_FLAG)) {
+    localStorage.setItem(MIGRATION_FLAG, oldFlag);
+  }
+  if (oldFlag) localStorage.removeItem(OLD_MIGRATION_FLAG);
+}
 
 export function useDeckMigration() {
   const { user, supabase } = useAuth();

@@ -3,7 +3,17 @@
 import { useCallback, useSyncExternalStore } from "react";
 import type { Deck } from "@/lib/cards/types";
 
-const STORAGE_KEY = "cyberpunk-tcg-decks";
+const STORAGE_KEY = "ripperdeck-decks";
+const OLD_STORAGE_KEY = "cyberpunk-tcg-decks";
+
+// One-time migration from old storage key
+if (typeof window !== "undefined") {
+  const old = localStorage.getItem(OLD_STORAGE_KEY);
+  if (old && !localStorage.getItem(STORAGE_KEY)) {
+    localStorage.setItem(STORAGE_KEY, old);
+  }
+  if (old) localStorage.removeItem(OLD_STORAGE_KEY);
+}
 
 let cachedDecks: Deck[] = [];
 let cachedRaw: string | null = null;

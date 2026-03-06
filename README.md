@@ -1,10 +1,12 @@
-# Cyberpunk TCG Deckbuilder
+# ripperdeck
 
 A deckbuilder web app for the Cyberpunk 2077 Trading Card Game by WeirdCo/CDPR. Think Moxfield or Dreamborn.ink, but for Night City.
 
+**https://ripperdeck.gg**
+
 ## Tech Stack
 
-- **Next.js 14+** (App Router, TypeScript)
+- **Next.js 16** (App Router, TypeScript)
 - **Tailwind CSS v4**
 - **Supabase** (Postgres + Auth + Storage)
 - **Recharts** for data visualization
@@ -77,7 +79,7 @@ supabase/
 - **Live Validation** — Real-time deck validation (card count, RAM budget, copy limits)
 - **Deck Analytics** — Eddie cost curve, type distribution, color breakdown, sell tag ratio
 - **SEO** — Individual card pages are statically generated for search engine indexing
-- **Offline-First** — Decks save to localStorage (Supabase sync coming in Phase 2)
+- **Cloud Sync** — Decks save to Supabase when logged in, localStorage fallback when offline
 
 ## Deck Rules
 
@@ -88,6 +90,6 @@ supabase/
 
 ## Roadmap
 
-- **Phase 1** (current): Core deckbuilder with local data
-- **Phase 2**: Auth (Discord OAuth), cloud deck saving, public deck sharing
+- **Phase 1** (done): Core deckbuilder with local data
+- **Phase 2** (done): Auth (Discord/Google/GitHub OAuth), cloud deck saving, migration banner
 - **Phase 3**: Deck comments, upvotes, metagame analytics

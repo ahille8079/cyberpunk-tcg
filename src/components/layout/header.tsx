@@ -24,8 +24,8 @@ export function Header() {
           href="/"
           className="font-mono text-lg font-bold text-cyber-yellow tracking-widest"
         >
-          <span className="sm:hidden">CP TCG</span>
-          <span className="hidden sm:inline">CYBERPUNK TCG</span>
+          <span className="sm:hidden">RPRDK</span>
+          <span className="hidden sm:inline">RIPPERDECK</span>
         </Link>
 
         {/* Desktop nav */}

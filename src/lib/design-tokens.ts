@@ -1,5 +1,5 @@
 /**
- * Centralized design tokens for the Cyberpunk TCG project.
+ * Centralized design tokens for ripperdeck.
  * All color and typography constants live here as the single source of truth.
  */
 
