@@ -244,6 +244,12 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
             }
             placeholder="Deck Name..."
             data-testid="deck-name-input"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSave();
+              }
+            }}
             className="flex-1 bg-transparent text-lg font-bold text-cyber-light placeholder:text-cyber-light/20 focus:outline-none border-b border-transparent focus:border-cyber-yellow"
           />
           <div className="flex gap-2 sm:gap-4">
