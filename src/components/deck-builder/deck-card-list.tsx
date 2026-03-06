@@ -47,7 +47,7 @@ export function DeckCardList({
   const typeOrder = ["unit", "gear", "program"];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-testid="deck-card-list">
       {/* Legends */}
       <div>
         <h3 className="text-xs font-mono uppercase text-cyber-light/50 mb-2">

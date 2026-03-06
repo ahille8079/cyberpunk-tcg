@@ -135,7 +135,7 @@ export default function DecksPage() {
               {isAuthenticated ? "" : " saved locally"}
             </p>
           </div>
-          <CyberButton href="/decks/new" variant="primary">
+          <CyberButton href="/decks/new" variant="primary" data-testid="new-deck-btn">
             New Deck
           </CyberButton>
         </div>

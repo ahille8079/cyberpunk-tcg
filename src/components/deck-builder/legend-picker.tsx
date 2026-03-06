@@ -20,8 +20,8 @@ export function LegendPicker({
   const isFull = selectedLegends.length >= MAX_LEGENDS;
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-xs font-mono uppercase text-cyber-light/50 mb-3">
+    <div className="space-y-2" data-testid="legend-picker">
+      <h3 className="text-xs font-mono uppercase text-cyber-light/50 mb-3" data-testid="legend-counter">
         Select {MAX_LEGENDS} Legends ({selectedLegends.length}/{MAX_LEGENDS})
       </h3>
 
@@ -33,6 +33,7 @@ export function LegendPicker({
         return (
           <button
             key={legend.id}
+            data-testid={`legend-btn-${legend.id}`}
             onClick={() => !isDisabled && onToggleLegend(legend)}
             disabled={isDisabled}
             className={cn(

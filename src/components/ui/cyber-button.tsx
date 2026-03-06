@@ -18,6 +18,7 @@ interface CyberButtonProps {
   className?: string;
   disabled?: boolean;
   type?: "button" | "submit";
+  "data-testid"?: string;
 }
 
 export function CyberButton({
@@ -28,6 +29,7 @@ export function CyberButton({
   className,
   disabled = false,
   type = "button",
+  "data-testid": testId,
 }: CyberButtonProps) {
   const classes = cn(
     "inline-flex items-center justify-center px-4 py-2.5 sm:px-6 sm:py-3 font-mono text-sm uppercase tracking-wider transition-all duration-200 clip-corner",
@@ -38,7 +40,7 @@ export function CyberButton({
 
   if (href && !disabled) {
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} data-testid={testId}>
         {children}
       </Link>
     );
@@ -50,6 +52,7 @@ export function CyberButton({
       onClick={onClick}
       disabled={disabled}
       className={classes}
+      data-testid={testId}
     >
       {children}
     </button>

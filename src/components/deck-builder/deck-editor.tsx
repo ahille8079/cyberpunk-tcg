@@ -238,15 +238,17 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
               dispatch({ type: "SET_NAME", name: e.target.value })
             }
             placeholder="Deck Name..."
+            data-testid="deck-name-input"
             className="flex-1 bg-transparent text-lg font-bold text-cyber-light placeholder:text-cyber-light/20 focus:outline-none border-b border-transparent focus:border-cyber-yellow"
           />
           <div className="flex gap-2 sm:gap-4">
-            <CyberButton onClick={handleSave} variant="primary" disabled={saving}>
+            <CyberButton onClick={handleSave} variant="primary" disabled={saving} data-testid="save-deck-btn">
               {saving ? "Saving..." : saved ? "Saved!" : "Save Deck"}
             </CyberButton>
             <CyberButton
               onClick={() => dispatch({ type: "CLEAR" })}
               variant="ghost"
+              data-testid="clear-deck-btn"
             >
               Clear
             </CyberButton>

@@ -31,6 +31,7 @@ export function CardGrid({
 
   return (
     <div
+      data-testid="card-grid"
       className={cn(
         "grid gap-3",
         cardSize === "sm"

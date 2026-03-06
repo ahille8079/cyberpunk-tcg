@@ -32,6 +32,7 @@ export function CardDisplay({
 
   return (
     <div
+      data-testid={`card-${card.id}`}
       onClick={() => onClick?.(card)}
       className={cn(
         "relative flex flex-col rounded-lg border border-cyber-grey bg-cyber-dark overflow-hidden transition-all duration-200 group",
