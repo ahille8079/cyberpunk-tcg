@@ -1,6 +1,7 @@
 "use client";
 
 import { getLegends } from "@/data/cards";
+import { useAllCards } from "@/lib/cards/cards-provider";
 import type { Card } from "@/lib/cards/types";
 import { cn, COLOR_HEX, MAX_LEGENDS } from "@/lib/utils";
 
@@ -13,7 +14,8 @@ export function LegendPicker({
   selectedLegends,
   onToggleLegend,
 }: LegendPickerProps) {
-  const legends = getLegends();
+  const allCards = useAllCards();
+  const legends = getLegends(allCards);
   const selectedIds = new Set(selectedLegends.map((l) => l.id));
   const isFull = selectedLegends.length >= MAX_LEGENDS;
 

@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useLocalDecks } from "@/lib/hooks/use-local-decks";
 import { getCardById } from "@/data/cards";
+import { useAllCards } from "@/lib/cards/cards-provider";
 import { CyberButton } from "@/components/ui/cyber-button";
 import { COLOR_HEX } from "@/lib/utils";
 
 export default function DecksPage() {
+  const allCards = useAllCards();
   const { decks, deleteDeck } = useLocalDecks();
 
   return (
@@ -44,7 +46,7 @@ export default function DecksPage() {
                 deck.legend_3_id,
               ].filter(Boolean);
               const legends = legendIds
-                .map((id) => getCardById(id!))
+                .map((id) => getCardById(id!, allCards))
                 .filter(Boolean);
               const totalCards = deck.cards.reduce(
                 (sum, c) => sum + c.quantity,

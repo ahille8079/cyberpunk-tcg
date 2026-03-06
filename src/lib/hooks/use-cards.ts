@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { getUniqueCards } from "@/data/cards";
+import { useAllCards } from "@/lib/cards/cards-provider";
 import type { Card, CardFilters } from "@/lib/cards/types";
 
 const RARITY_ORDER: Record<string, number> = {
@@ -15,8 +16,9 @@ const RARITY_ORDER: Record<string, number> = {
 };
 
 export function useCards(filters?: CardFilters): Card[] {
+  const allCards = useAllCards();
   return useMemo(() => {
-    let result = [...getUniqueCards()];
+    let result = [...getUniqueCards(allCards)];
 
     if (filters?.search) {
       const q = filters.search.toLowerCase();
@@ -75,5 +77,5 @@ export function useCards(filters?: CardFilters): Card[] {
     });
 
     return result;
-  }, [filters]);
+  }, [filters, allCards]);
 }

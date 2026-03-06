@@ -1,8 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useReducer, useState } from "react";
-import { cards as allCards } from "@/data/cards";
-import { getNonLegends } from "@/data/cards";
+import { useAllCards } from "@/lib/cards/cards-provider";
 import type { Card, CardFilters, Deck, DeckCard } from "@/lib/cards/types";
 import { validateDeck } from "@/lib/cards/validation";
 import { useLocalDecks } from "@/lib/hooks/use-local-decks";
@@ -118,6 +117,7 @@ interface DeckEditorProps {
 type MobileTab = "legends" | "cards" | "deck";
 
 export function DeckEditor({ initialDeck }: DeckEditorProps) {
+  const allCards = useAllCards();
   const [state, dispatch] = useReducer(deckReducer, null, () => {
     if (initialDeck) {
       const legends = [
