@@ -92,7 +92,7 @@ export function FilterSidebar({
                 setFilter("card_type", filters.card_type === t.value ? null : t.value)
               }
               className={cn(
-                "px-2.5 py-1 text-xs font-mono rounded border transition-colors",
+                "px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs font-mono rounded border transition-colors",
                 filters.card_type === t.value
                   ? "border-cyber-yellow bg-cyber-yellow/10 text-cyber-yellow"
                   : "border-cyber-grey text-cyber-light/60 hover:border-cyber-light/40"
@@ -117,7 +117,7 @@ export function FilterSidebar({
                 setFilter("color", filters.color === c.value ? null : c.value)
               }
               className={cn(
-                "w-8 h-8 rounded-full border-2 transition-all",
+                "w-10 h-10 sm:w-8 sm:h-8 rounded-full border-2 transition-all",
                 filters.color === c.value
                   ? "scale-110 border-white"
                   : "border-transparent opacity-60 hover:opacity-100"

@@ -119,7 +119,7 @@ export function DeckCardList({
                           key={q}
                           onClick={() => onChangeQuantity(card.id, q)}
                           className={cn(
-                            "w-5 h-5 text-[10px] font-mono rounded-sm transition-colors",
+                            "w-7 h-7 sm:w-5 sm:h-5 text-xs sm:text-[10px] font-mono rounded-sm transition-colors",
                             q <= card.quantity
                               ? "bg-cyber-grey text-cyber-light"
                               : "text-cyber-light/20 hover:text-cyber-light/40"
@@ -147,7 +147,7 @@ export function DeckCardList({
                     {/* Remove */}
                     <button
                       onClick={() => onRemoveCard(card.id)}
-                      className="text-cyber-light/20 hover:text-cyber-magenta text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="text-cyber-light/20 hover:text-cyber-magenta text-xs opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity p-1"
                     >
                       ✕
                     </button>

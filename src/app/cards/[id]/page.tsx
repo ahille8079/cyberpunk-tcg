@@ -63,12 +63,12 @@ export default async function CardPage({ params }: Props) {
               background: `linear-gradient(135deg, ${colorHex}15, transparent)`,
             }}
           >
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col-reverse sm:flex-row items-start justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-cyber-light">
+                <h1 className="text-2xl sm:text-3xl font-bold text-cyber-light">
                   {card.name}
                 </h1>
-                <div className="flex items-center gap-3 mt-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
                   <span
                     className="text-sm font-mono uppercase px-2 py-1 rounded"
                     style={{
@@ -95,7 +95,7 @@ export default async function CardPage({ params }: Props) {
 
               {/* Image placeholder */}
               <div
-                className="w-32 h-44 rounded-lg border border-cyber-grey flex items-center justify-center text-5xl opacity-30"
+                className="w-full sm:w-32 h-36 sm:h-44 rounded-lg border border-cyber-grey flex items-center justify-center text-5xl opacity-30 shrink-0"
                 style={{
                   background: `linear-gradient(135deg, ${colorHex}20, ${colorHex}05)`,
                 }}
@@ -215,7 +215,7 @@ export default async function CardPage({ params }: Props) {
           )}
 
           {/* Meta */}
-          <div className="px-6 py-4 border-t border-cyber-grey flex items-center gap-4 text-xs font-mono text-cyber-light/30">
+          <div className="px-6 py-4 border-t border-cyber-grey flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono text-cyber-light/30">
             <span>Set: {card.set_name} ({card.set_code})</span>
             {card.card_number && <span>#{card.card_number}</span>}
             {card.has_sell_tag && <span className="text-cyber-yellow/50">$ SELL</span>}

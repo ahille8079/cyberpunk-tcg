@@ -66,9 +66,9 @@ export default function DecksPage() {
                       <h2 className="text-lg font-bold text-cyber-light hover:text-cyber-yellow transition-colors">
                         {deck.name || "Untitled Deck"}
                       </h2>
-                      <div className="flex items-center gap-3 mt-1.5">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1.5">
                         {/* Legends */}
-                        <div className="flex items-center gap-1">
+                        <div className="flex flex-wrap items-center gap-1">
                           {legends.map((legend) => (
                             <span
                               key={legend!.id}
@@ -90,7 +90,7 @@ export default function DecksPage() {
 
                     <button
                       onClick={() => deleteDeck(deck.id)}
-                      className="text-xs font-mono text-cyber-light/20 hover:text-cyber-magenta ml-4"
+                      className="text-xs font-mono text-cyber-light/20 hover:text-cyber-magenta ml-4 px-2 py-2 min-h-[44px] flex items-center"
                     >
                       Delete
                     </button>

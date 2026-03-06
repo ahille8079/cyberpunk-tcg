@@ -193,7 +193,7 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
     <div className="min-h-screen pt-14">
       {/* Top bar */}
       <div className="bg-cyber-dark/50 border-b border-cyber-grey">
-        <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4">
+        <div className="max-w-[1600px] mx-auto px-4 py-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4">
           <input
             type="text"
             value={state.name}
@@ -203,15 +203,17 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
             placeholder="Deck Name..."
             className="flex-1 bg-transparent text-lg font-bold text-cyber-light placeholder:text-cyber-light/20 focus:outline-none border-b border-transparent focus:border-cyber-yellow"
           />
-          <CyberButton onClick={handleSave} variant="primary">
-            {saved ? "Saved!" : "Save Deck"}
-          </CyberButton>
-          <CyberButton
-            onClick={() => dispatch({ type: "CLEAR" })}
-            variant="ghost"
-          >
-            Clear
-          </CyberButton>
+          <div className="flex gap-2 sm:gap-4">
+            <CyberButton onClick={handleSave} variant="primary">
+              {saved ? "Saved!" : "Save Deck"}
+            </CyberButton>
+            <CyberButton
+              onClick={() => dispatch({ type: "CLEAR" })}
+              variant="ghost"
+            >
+              Clear
+            </CyberButton>
+          </div>
         </div>
       </div>
 
@@ -227,7 +229,7 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
           <button
             key={tab.key}
             onClick={() => setMobileTab(tab.key)}
-            className={`flex-1 py-2 text-xs font-mono uppercase tracking-wider transition-colors ${
+            className={`flex-1 py-3 text-sm font-mono uppercase tracking-wider transition-colors ${
               mobileTab === tab.key
                 ? "text-cyber-yellow border-b-2 border-cyber-yellow"
                 : "text-cyber-light/40"

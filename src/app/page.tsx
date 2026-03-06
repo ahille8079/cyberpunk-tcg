@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen pt-14">
       {/* Hero */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[60vh] sm:min-h-[80vh] flex items-center justify-center overflow-hidden">
         {/* Animated background */}
         <div className="absolute inset-0 bg-cyber-black">
           <div

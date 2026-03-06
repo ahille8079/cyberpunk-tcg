@@ -9,7 +9,7 @@ import type { CardFilters } from "@/lib/cards/types";
 
 export default function CardsPage() {
   const [filters, setFilters] = useState<CardFilters>({});
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const cards = useCards(filters);
   const router = useRouter();
 
@@ -18,7 +18,7 @@ export default function CardsPage() {
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold font-mono text-cyber-yellow">
+            <h1 className="text-xl sm:text-2xl font-bold font-mono text-cyber-yellow">
               Card Database
             </h1>
             <p className="text-sm text-cyber-light/50 font-mono mt-1">
@@ -33,7 +33,7 @@ export default function CardsPage() {
           </button>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
           <div
             className={`${
               sidebarOpen ? "block" : "hidden"
@@ -42,7 +42,7 @@ export default function CardsPage() {
             <FilterSidebar
               filters={filters}
               onFilterChange={setFilters}
-              className="sticky top-20"
+              className="md:sticky md:top-20"
             />
           </div>
 
