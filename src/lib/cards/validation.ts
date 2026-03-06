@@ -1,5 +1,6 @@
 import type { Card, DeckCard, DeckValidation, DeckStats } from "./types";
 import { DECK_MIN_CARDS, DECK_MAX_CARDS, MAX_COPIES, MAX_LEGENDS } from "../utils";
+import { DECK_BUILDING } from "../game";
 
 export function validateDeck(
   legends: Card[],
@@ -95,7 +96,7 @@ export function validateDeck(
     .reduce((sum, c) => sum + c.quantity, 0);
   const sellTagRatio = totalCards > 0 ? sellTagCount / totalCards : 0;
 
-  if (sellTagRatio < 0.3 && totalCards > 0) {
+  if (sellTagRatio < DECK_BUILDING.RECOMMENDED_SELL_TAG_RATIO && totalCards > 0) {
     warnings.push(
       `Only ${Math.round(sellTagRatio * 100)}% of cards have Sell Tags (recommend 30%+)`
     );
@@ -106,8 +107,8 @@ export function validateDeck(
     .filter((c) => c.keywords.some((k) => k.toLowerCase() === "blocker"))
     .reduce((sum, c) => sum + c.quantity, 0);
 
-  if (blockerCount < 4 && totalCards > 0) {
-    warnings.push(`Low Blocker count: ${blockerCount} (recommend 4+)`);
+  if (blockerCount < DECK_BUILDING.RECOMMENDED_MIN_BLOCKERS && totalCards > 0) {
+    warnings.push(`Low Blocker count: ${blockerCount} (recommend ${DECK_BUILDING.RECOMMENDED_MIN_BLOCKERS}+)`);
   }
 
   // Power breakpoints

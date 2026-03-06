@@ -48,6 +48,8 @@ function deckReducer(state: DeckState, action: DeckAction): DeckState {
         };
       }
       if (state.legends.length >= 3) return state;
+      // Enforce unique legend names (different printings share the same name)
+      if (state.legends.some((l) => l.name === action.card.name)) return state;
       return { ...state, legends: [...state.legends, action.card] };
     }
     case "ADD_CARD": {
