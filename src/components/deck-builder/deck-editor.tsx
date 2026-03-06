@@ -1,0 +1,308 @@
+"use client";
+
+import { useCallback, useMemo, useReducer, useState } from "react";
+import { cards as allCards } from "@/data/cards";
+import { getNonLegends } from "@/data/cards";
+import type { Card, CardFilters, Deck, DeckCard } from "@/lib/cards/types";
+import { validateDeck } from "@/lib/cards/validation";
+import { useLocalDecks } from "@/lib/hooks/use-local-decks";
+import { useCards } from "@/lib/hooks/use-cards";
+import { MAX_COPIES } from "@/lib/utils";
+import { CardGrid } from "@/components/cards/card-grid";
+import { FilterSidebar } from "@/components/ui/filter-sidebar";
+import { LegendPicker } from "./legend-picker";
+import { DeckCardList } from "./deck-card-list";
+import { DeckStats } from "./deck-stats";
+import { CyberButton } from "@/components/ui/cyber-button";
+
+// State
+interface DeckState {
+  id: string;
+  name: string;
+  description: string;
+  legends: Card[];
+  cards: DeckCard[];
+}
+
+type DeckAction =
+  | { type: "SET_NAME"; name: string }
+  | { type: "SET_DESCRIPTION"; description: string }
+  | { type: "TOGGLE_LEGEND"; card: Card }
+  | { type: "ADD_CARD"; card: Card }
+  | { type: "REMOVE_CARD"; cardId: string }
+  | { type: "SET_QUANTITY"; cardId: string; quantity: number }
+  | { type: "LOAD_DECK"; deck: DeckState }
+  | { type: "CLEAR" };
+
+function deckReducer(state: DeckState, action: DeckAction): DeckState {
+  switch (action.type) {
+    case "SET_NAME":
+      return { ...state, name: action.name };
+    case "SET_DESCRIPTION":
+      return { ...state, description: action.description };
+    case "TOGGLE_LEGEND": {
+      const exists = state.legends.find((l) => l.id === action.card.id);
+      if (exists) {
+        return {
+          ...state,
+          legends: state.legends.filter((l) => l.id !== action.card.id),
+        };
+      }
+      if (state.legends.length >= 3) return state;
+      return { ...state, legends: [...state.legends, action.card] };
+    }
+    case "ADD_CARD": {
+      const existing = state.cards.find(
+        (c) => c.card_id === action.card.id
+      );
+      if (existing) {
+        if (existing.quantity >= MAX_COPIES) return state;
+        return {
+          ...state,
+          cards: state.cards.map((c) =>
+            c.card_id === action.card.id
+              ? { ...c, quantity: c.quantity + 1 }
+              : c
+          ),
+        };
+      }
+      return {
+        ...state,
+        cards: [...state.cards, { card_id: action.card.id, quantity: 1 }],
+      };
+    }
+    case "REMOVE_CARD":
+      return {
+        ...state,
+        cards: state.cards.filter((c) => c.card_id !== action.cardId),
+      };
+    case "SET_QUANTITY": {
+      if (action.quantity <= 0) {
+        return {
+          ...state,
+          cards: state.cards.filter((c) => c.card_id !== action.cardId),
+        };
+      }
+      return {
+        ...state,
+        cards: state.cards.map((c) =>
+          c.card_id === action.cardId
+            ? { ...c, quantity: Math.min(action.quantity, MAX_COPIES) }
+            : c
+        ),
+      };
+    }
+    case "LOAD_DECK":
+      return action.deck;
+    case "CLEAR":
+      return createInitialState();
+    default:
+      return state;
+  }
+}
+
+function createInitialState(): DeckState {
+  return {
+    id: crypto.randomUUID(),
+    name: "",
+    description: "",
+    legends: [],
+    cards: [],
+  };
+}
+
+interface DeckEditorProps {
+  initialDeck?: Deck;
+}
+
+type MobileTab = "legends" | "cards" | "deck";
+
+export function DeckEditor({ initialDeck }: DeckEditorProps) {
+  const [state, dispatch] = useReducer(deckReducer, null, () => {
+    if (initialDeck) {
+      const legends = [
+        initialDeck.legend_1_id,
+        initialDeck.legend_2_id,
+        initialDeck.legend_3_id,
+      ]
+        .filter((id): id is string => id != null)
+        .map((id) => allCards.find((c) => c.id === id))
+        .filter((c): c is Card => c != null);
+
+      return {
+        id: initialDeck.id,
+        name: initialDeck.name,
+        description: initialDeck.description ?? "",
+        legends,
+        cards: initialDeck.cards,
+      };
+    }
+    return createInitialState();
+  });
+
+  const [filters, setFilters] = useState<CardFilters>({});
+  const [mobileTab, setMobileTab] = useState<MobileTab>("cards");
+  const [saved, setSaved] = useState(false);
+  const { saveDeck } = useLocalDecks();
+
+  // Filter to non-legend cards
+  const nonLegendFilters = useMemo(
+    () => ({ ...filters, card_type: filters.card_type ?? undefined }),
+    [filters]
+  );
+  const filteredCards = useCards(nonLegendFilters).filter(
+    (c) => c.card_type !== "legend"
+  );
+
+  // Quantities map for card grid
+  const quantities = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const dc of state.cards) {
+      map[dc.card_id] = dc.quantity;
+    }
+    return map;
+  }, [state.cards]);
+
+  // Validation
+  const validation = useMemo(
+    () => validateDeck(state.legends, state.cards, allCards),
+    [state.legends, state.cards]
+  );
+
+  const handleSave = useCallback(() => {
+    const deck: Deck = {
+      id: state.id,
+      name: state.name || "Untitled Deck",
+      description: state.description || null,
+      legend_1_id: state.legends[0]?.id ?? null,
+      legend_2_id: state.legends[1]?.id ?? null,
+      legend_3_id: state.legends[2]?.id ?? null,
+      cards: state.cards,
+      is_public: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    saveDeck(deck);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }, [state, saveDeck]);
+
+  return (
+    <div className="min-h-screen pt-14">
+      {/* Top bar */}
+      <div className="bg-cyber-dark/50 border-b border-cyber-grey">
+        <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center gap-4">
+          <input
+            type="text"
+            value={state.name}
+            onChange={(e) =>
+              dispatch({ type: "SET_NAME", name: e.target.value })
+            }
+            placeholder="Deck Name..."
+            className="flex-1 bg-transparent text-lg font-bold text-cyber-light placeholder:text-cyber-light/20 focus:outline-none border-b border-transparent focus:border-cyber-yellow"
+          />
+          <CyberButton onClick={handleSave} variant="primary">
+            {saved ? "Saved!" : "Save Deck"}
+          </CyberButton>
+          <CyberButton
+            onClick={() => dispatch({ type: "CLEAR" })}
+            variant="ghost"
+          >
+            Clear
+          </CyberButton>
+        </div>
+      </div>
+
+      {/* Mobile tab bar */}
+      <div className="lg:hidden flex border-b border-cyber-grey">
+        {(
+          [
+            { key: "legends", label: "Legends" },
+            { key: "cards", label: "Cards" },
+            { key: "deck", label: "Deck" },
+          ] as const
+        ).map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setMobileTab(tab.key)}
+            className={`flex-1 py-2 text-xs font-mono uppercase tracking-wider transition-colors ${
+              mobileTab === tab.key
+                ? "text-cyber-yellow border-b-2 border-cyber-yellow"
+                : "text-cyber-light/40"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* 3-panel layout */}
+      <div className="max-w-[1600px] mx-auto px-4 py-4">
+        <div className="lg:grid lg:grid-cols-[280px_1fr_320px] lg:gap-4">
+          {/* Left: Legend Picker */}
+          <div
+            className={`${
+              mobileTab === "legends" ? "block" : "hidden"
+            } lg:block`}
+          >
+            <div className="sticky top-20">
+              <LegendPicker
+                selectedLegends={state.legends}
+                onToggleLegend={(card) =>
+                  dispatch({ type: "TOGGLE_LEGEND", card })
+                }
+              />
+            </div>
+          </div>
+
+          {/* Center: Card Browser */}
+          <div
+            className={`${
+              mobileTab === "cards" ? "block" : "hidden"
+            } lg:block min-w-0`}
+          >
+            <div className="mb-4">
+              <FilterSidebar
+                filters={filters}
+                onFilterChange={setFilters}
+              />
+            </div>
+            <CardGrid
+              cards={filteredCards}
+              onCardClick={(card) => dispatch({ type: "ADD_CARD", card })}
+              showQuantities={quantities}
+              cardSize="sm"
+              emptyMessage="No cards match your filters"
+            />
+          </div>
+
+          {/* Right: Deck List + Stats */}
+          <div
+            className={`${
+              mobileTab === "deck" ? "block" : "hidden"
+            } lg:block`}
+          >
+            <div className="sticky top-20 space-y-4 max-h-[calc(100vh-6rem)] overflow-y-auto">
+              <DeckCardList
+                legends={state.legends}
+                deckCards={state.cards}
+                allCards={allCards}
+                onRemoveCard={(cardId) =>
+                  dispatch({ type: "REMOVE_CARD", cardId })
+                }
+                onChangeQuantity={(cardId, quantity) =>
+                  dispatch({ type: "SET_QUANTITY", cardId, quantity })
+                }
+                onRemoveLegend={(cardId) => {
+                  const legend = state.legends.find((l) => l.id === cardId);
+                  if (legend) dispatch({ type: "TOGGLE_LEGEND", card: legend });
+                }}
+              />
+              <DeckStats validation={validation} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
