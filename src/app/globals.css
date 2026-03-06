@@ -61,38 +61,6 @@
   90% { transform: translate(-1px, 1px); }
 }
 
-@keyframes jack-in-rgb-split {
-  0% { opacity: 0; }
-  5% { opacity: 1; }
-  10% { opacity: 0; }
-  15% { opacity: 0.8; }
-  20% { opacity: 0.1; }
-  30% { opacity: 1; }
-  35% { opacity: 0; }
-  45% { opacity: 0.7; }
-  50% { opacity: 0; }
-  60% { opacity: 0.5; }
-  70% { opacity: 0.1; }
-  80% { opacity: 0.3; }
-  90% { opacity: 0; }
-  100% { opacity: 0; }
-}
-
-@keyframes jack-in-flicker {
-  0% { opacity: 0; }
-  3% { opacity: 0.6; }
-  6% { opacity: 0; }
-  9% { opacity: 0.4; }
-  12% { opacity: 0; }
-  40% { opacity: 0; }
-  42% { opacity: 0.3; }
-  44% { opacity: 0; }
-  80% { opacity: 0; }
-  82% { opacity: 0.5; }
-  85% { opacity: 0; }
-  100% { opacity: 0; }
-}
-
 @keyframes jack-in-scanlines {
   0% { opacity: 0; }
   10% { opacity: 0.5; }
@@ -100,19 +68,6 @@
   50% { opacity: 0.4; }
   70% { opacity: 0.7; }
   90% { opacity: 0.3; }
-  100% { opacity: 0; }
-}
-
-@keyframes jack-in-bar {
-  0% { opacity: 0; }
-  10% { opacity: 1; }
-  20% { opacity: 0; }
-  35% { opacity: 1; }
-  40% { opacity: 0; }
-  55% { opacity: 1; }
-  60% { opacity: 0; }
-  75% { opacity: 0.8; }
-  80% { opacity: 0; }
   100% { opacity: 0; }
 }
 
