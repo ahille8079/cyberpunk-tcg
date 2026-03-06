@@ -10,6 +10,7 @@ import { useAllCards } from "@/lib/cards/cards-provider";
 import { CyberButton } from "@/components/ui/cyber-button";
 import { AuthModal } from "@/components/auth/auth-modal";
 import { COLOR_HEX } from "@/lib/utils";
+import { triggerGlitchEffect, GLITCH_DURATION } from "@/lib/glitch-effect";
 import type { Deck } from "@/lib/cards/types";
 
 function DeckCard({
@@ -145,7 +146,10 @@ export default function DecksPage() {
           <div className="mb-6 p-4 border border-cyber-cyan/20 rounded-lg bg-cyber-cyan/5">
             <p className="text-sm font-mono text-cyber-light/60">
               <button
-                onClick={() => setShowAuthModal(true)}
+                onClick={() => {
+                  triggerGlitchEffect();
+                  setTimeout(() => setShowAuthModal(true), GLITCH_DURATION);
+                }}
                 className="text-cyber-cyan hover:text-cyber-yellow transition-colors underline underline-offset-2"
               >
                 Jack in

@@ -8,8 +8,8 @@ import { validateDeck } from "@/lib/cards/validation";
 import { useLocalDecks } from "@/lib/hooks/use-local-decks";
 import { useCards } from "@/lib/hooks/use-cards";
 import { useAuth } from "@/lib/auth";
-import { saveCloudDeck } from "@/lib/supabase/deck-service";
-import { triggerGlitchEffect } from "@/lib/glitch-effect";
+import { saveCloudDeck, DeckLimitError } from "@/lib/supabase/deck-service";
+import { triggerGlitchEffect, GLITCH_DURATION } from "@/lib/glitch-effect";
 import { MAX_COPIES } from "@/lib/utils";
 import { CardGrid } from "@/components/cards/card-grid";
 import { FilterSidebar } from "@/components/ui/filter-sidebar";
@@ -206,6 +206,11 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
       }, skipGlitch ? 0 : 500);
     } catch (err) {
       console.error("Cloud save failed:", err);
+      if (err instanceof DeckLimitError) {
+        alert(err.message);
+        setSaving(false);
+        return;
+      }
       saveLocalDeck(buildDeck());
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
@@ -225,7 +230,8 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
   const handleSave = useCallback(() => {
     if (!user) {
       pendingSave.current = true;
-      setShowAuthModal(true);
+      triggerGlitchEffect();
+      setTimeout(() => setShowAuthModal(true), GLITCH_DURATION);
       return;
     }
     doCloudSave();

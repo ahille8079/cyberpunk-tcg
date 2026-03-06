@@ -1,5 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Deck, DeckCard } from "@/lib/cards/types";
+import { MAX_DECKS } from "@/lib/utils";
+
+export class DeckLimitError extends Error {
+  constructor() {
+    super(`You've reached the maximum of ${MAX_DECKS} decks. Delete a deck to create a new one.`);
+    this.name = "DeckLimitError";
+  }
+}
 
 /** Save (upsert) a deck to the cloud. Returns the deck id. */
 export async function saveCloudDeck(
@@ -7,6 +15,24 @@ export async function saveCloudDeck(
   deck: Deck,
   userId: string
 ): Promise<string> {
+  // Check if this is a new deck (not an update to an existing one)
+  const { data: existing } = await supabase
+    .from("decks")
+    .select("id")
+    .eq("id", deck.id)
+    .maybeSingle();
+
+  if (!existing) {
+    const { count } = await supabase
+      .from("decks")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", userId);
+
+    if (count !== null && count >= MAX_DECKS) {
+      throw new DeckLimitError();
+    }
+  }
+
   const { data, error: deckError } = await supabase
     .from("decks")
     .upsert(

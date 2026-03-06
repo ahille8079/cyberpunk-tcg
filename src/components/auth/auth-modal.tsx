@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/lib/auth";
 
 interface AuthModalProps {
@@ -25,12 +26,14 @@ const providers = [
 export function AuthModal({ open, onClose, message }: AuthModalProps) {
   const { signInWithOAuth } = useAuth();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
     if (open) {
+      setAgreedToTerms(false);
       dialog.showModal();
     } else {
       dialog.close();
@@ -72,13 +75,42 @@ export function AuthModal({ open, onClose, message }: AuthModalProps) {
           </p>
         )}
 
+        {/* TOS/Privacy agreement */}
+        <label className="flex items-start gap-2.5 mb-5 cursor-pointer group">
+          <input
+            type="checkbox"
+            checked={agreedToTerms}
+            onChange={(e) => setAgreedToTerms(e.target.checked)}
+            className="mt-0.5 w-4 h-4 accent-cyber-yellow cursor-pointer shrink-0"
+          />
+          <span className="text-xs font-mono text-cyber-light/40 group-hover:text-cyber-light/60 leading-relaxed">
+            I agree to the{" "}
+            <Link
+              href="/terms"
+              target="_blank"
+              className="text-cyber-cyan hover:text-cyber-cyan/80 underline underline-offset-2"
+            >
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/privacy"
+              target="_blank"
+              className="text-cyber-cyan hover:text-cyber-cyan/80 underline underline-offset-2"
+            >
+              Privacy Policy
+            </Link>
+          </span>
+        </label>
+
         {/* Provider buttons */}
         <div className="space-y-3">
           {providers.map((provider) => (
             <button
               key={provider.id}
               onClick={() => signInWithOAuth(provider.id)}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded font-mono text-sm font-semibold tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              disabled={!agreedToTerms}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded font-mono text-sm font-semibold tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
               style={{
                 backgroundColor: provider.color,
                 color: "#ffffff",
@@ -88,13 +120,6 @@ export function AuthModal({ open, onClose, message }: AuthModalProps) {
               Continue with {provider.label}
             </button>
           ))}
-        </div>
-
-        {/* Divider accent */}
-        <div className="mt-5 pt-4 border-t border-cyber-grey">
-          <p className="text-xs font-mono text-cyber-light/25 text-center">
-            By signing in you agree to the standard terms of net-running
-          </p>
         </div>
       </div>
     </dialog>

@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen pt-14">
       {/* Hero */}
-      <section className="relative min-h-[60vh] sm:min-h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[50vh] sm:min-h-[60vh] flex items-center justify-center overflow-hidden">
         {/* Animated background */}
         <div className="absolute inset-0 bg-cyber-black">
           <div
@@ -25,6 +25,61 @@ export default function HomePage() {
           />
           {/* Scanline effect */}
           <div className="scanline-overlay absolute inset-0 opacity-30" />
+
+          {/* Large color washes — visible atmospheric glow */}
+          <div
+            className="absolute -top-1/2 -left-1/3 w-2/3 h-full pointer-events-none"
+            style={{
+              background: "radial-gradient(ellipse at 30% 40%, rgba(0,240,255,0.15), transparent 60%)",
+            }}
+          />
+          <div
+            className="absolute -bottom-1/3 -right-1/4 w-2/3 h-full pointer-events-none"
+            style={{
+              background: "radial-gradient(ellipse at 70% 70%, rgba(255,42,109,0.12), transparent 60%)",
+            }}
+          />
+
+          {/* Diagonal light beams */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-30"
+            style={{
+              background:
+                "linear-gradient(135deg, transparent 30%, rgba(0,240,255,0.08) 40%, rgba(0,240,255,0.15) 45%, rgba(0,240,255,0.08) 50%, transparent 60%)",
+            }}
+          />
+          <div
+            className="absolute inset-0 pointer-events-none opacity-20"
+            style={{
+              background:
+                "linear-gradient(225deg, transparent 30%, rgba(255,42,109,0.08) 40%, rgba(255,42,109,0.15) 45%, rgba(255,42,109,0.08) 50%, transparent 60%)",
+            }}
+          />
+
+          {/* Horizontal circuit traces */}
+          <div className="absolute left-0 right-0 top-[25%] h-px pointer-events-none"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(0,240,255,0.4) 15%, rgba(0,240,255,0.5) 25%, transparent 35%, transparent 65%, rgba(0,240,255,0.3) 75%, rgba(0,240,255,0.4) 85%, transparent)" }}
+          />
+          <div className="absolute left-0 right-0 top-[75%] h-px pointer-events-none"
+            style={{ background: "linear-gradient(90deg, transparent 10%, rgba(255,42,109,0.4) 20%, rgba(255,42,109,0.5) 35%, transparent 50%, transparent 55%, rgba(255,42,109,0.3) 70%, transparent 85%)" }}
+          />
+
+          {/* Vertical edge lines */}
+          <div className="absolute top-0 bottom-0 left-[10%] w-px pointer-events-none"
+            style={{ background: "linear-gradient(180deg, transparent, rgba(0,240,255,0.2) 30%, rgba(0,240,255,0.3) 50%, rgba(0,240,255,0.2) 70%, transparent)" }}
+          />
+          <div className="absolute top-0 bottom-0 right-[10%] w-px pointer-events-none"
+            style={{ background: "linear-gradient(180deg, transparent, rgba(255,42,109,0.2) 30%, rgba(255,42,109,0.3) 50%, rgba(255,42,109,0.2) 70%, transparent)" }}
+          />
+
+          {/* Bottom accent line */}
+          <div
+            className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, rgba(0,240,255,0.7) 20%, rgba(252,238,9,0.5) 50%, rgba(255,42,109,0.7) 80%, transparent)",
+            }}
+          />
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
@@ -38,7 +93,7 @@ export default function HomePage() {
             Run Your Gigs.
           </NeonText>
 
-          <p className="text-lg sm:text-xl text-cyber-light/60 mb-10 max-w-xl mx-auto">
+          <p className="text-lg sm:text-xl text-cyber-light/60 mb-6 max-w-xl mx-auto">
             The deckbuilder for the Cyberpunk 2077 Trading Card Game
           </p>
 
@@ -54,7 +109,7 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="py-20 px-4">
+      <section className="py-12 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {

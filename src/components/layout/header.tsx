@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { AuthButton } from "@/components/auth/auth-button";
+import { TipJarButton } from "@/components/tip-jar/tip-jar-button";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -26,6 +27,9 @@ export function Header() {
         >
           <span className="sm:hidden">RPRDK</span>
           <span className="hidden sm:inline">RIPPERDECK</span>
+          <span className="ml-2 text-[10px] px-1.5 py-0.5 bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40 rounded font-mono uppercase tracking-wider align-middle">
+            Beta
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -44,6 +48,7 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <TipJarButton />
           <div className="ml-2 pl-2 border-l border-cyber-grey">
             <AuthButton />
           </div>
@@ -51,6 +56,7 @@ export function Header() {
 
         {/* Mobile auth + hamburger */}
         <div className="flex md:hidden items-center gap-2">
+          <TipJarButton />
           <AuthButton />
           <button
             onClick={() => setMenuOpen(!menuOpen)}
