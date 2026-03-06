@@ -1,6 +1,7 @@
 "use client";
 
 import { cn, COLOR_HEX } from "@/lib/utils";
+import { colors } from "@/lib/design-tokens";
 import type { Card } from "@/lib/cards/types";
 
 interface CardDisplayProps {
@@ -18,15 +19,7 @@ const typeIcons: Record<string, string> = {
   program: "◈",
 };
 
-const rarityColors: Record<string, string> = {
-  common: "#9ca3af",
-  uncommon: "#22c55e",
-  rare: "#3b82f6",
-  epic: "#a855f7",
-  secret: "#ec4899",
-  iconic: "#f59e0b",
-  nova: "#ef4444",
-};
+const rarityColors = colors.rarity;
 
 export function CardDisplay({
   card,

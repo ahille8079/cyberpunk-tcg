@@ -5,13 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const COLOR_HEX: Record<string, string> = {
-  red: "#ff2a6d",
-  blue: "#05d9e8",
-  green: "#00f0ff",
-  yellow: "#fcee09",
-  neutral: "#d1d5db",
-};
+export { colors } from "@/lib/design-tokens";
+import { colors } from "@/lib/design-tokens";
+export const COLOR_HEX = colors.faction;
 
 export const DECK_MIN_CARDS = 40;
 export const DECK_MAX_CARDS = 50;

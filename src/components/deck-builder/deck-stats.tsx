@@ -12,14 +12,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { DeckValidation } from "@/lib/cards/types";
-import { COLOR_HEX } from "@/lib/utils";
-import { DECK_MIN_CARDS, DECK_MAX_CARDS } from "@/lib/utils";
+import { COLOR_HEX, DECK_MIN_CARDS, DECK_MAX_CARDS } from "@/lib/utils";
+import { colors } from "@/lib/design-tokens";
 
 interface DeckStatsProps {
   validation: DeckValidation;
 }
 
-const PIE_COLORS = ["#ff2a6d", "#05d9e8", "#00f0ff", "#fcee09", "#d1d5db"];
+const PIE_COLORS = [colors.magenta, colors.blue, colors.cyan, colors.yellow, colors.light];
 
 export function DeckStats({ validation }: DeckStatsProps) {
   const { stats, errors, warnings } = validation;
@@ -106,8 +106,8 @@ export function DeckStats({ validation }: DeckStatsProps) {
                           : "0%",
                       backgroundColor:
                         budget.used > budget.provided
-                          ? "#ff2a6d"
-                          : COLOR_HEX[color] ?? "#d1d5db",
+                          ? colors.magenta
+                          : COLOR_HEX[color] ?? colors.light,
                     }}
                   />
                 </div>
@@ -127,21 +127,21 @@ export function DeckStats({ validation }: DeckStatsProps) {
             <BarChart data={costCurveData}>
               <XAxis
                 dataKey="cost"
-                tick={{ fontSize: 10, fill: "#d1d5db" }}
+                tick={{ fontSize: 10, fill: colors.light }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis hide />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#12121a",
-                  border: "1px solid #1a1a2e",
+                  backgroundColor: colors.dark,
+                  border: `1px solid ${colors.grey}`,
                   borderRadius: "4px",
                   fontSize: "12px",
                 }}
-                labelStyle={{ color: "#fcee09" }}
+                labelStyle={{ color: colors.yellow }}
               />
-              <Bar dataKey="count" fill="#00f0ff" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="count" fill={colors.cyan} radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
