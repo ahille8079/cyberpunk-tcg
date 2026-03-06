@@ -20,7 +20,15 @@ export function CardsProvider({ children }: { children: ReactNode }) {
       .select("*")
       .then(({ data, error }) => {
         if (!error && data && data.length > 0) {
-          setCards(data as Card[]);
+          // Merge: prefer Supabase data but fall back to local JSON image_url
+          const localImageMap = new Map(
+            jsonCards.map((c) => [c.id, c.image_url])
+          );
+          const merged = (data as Card[]).map((card) => ({
+            ...card,
+            image_url: card.image_url ?? localImageMap.get(card.id) ?? null,
+          }));
+          setCards(merged);
         }
       });
   }, []);

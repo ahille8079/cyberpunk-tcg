@@ -34,7 +34,7 @@ export function CardDisplay({
     <div
       onClick={() => onClick?.(card)}
       className={cn(
-        "relative rounded-lg border border-cyber-grey bg-cyber-dark overflow-hidden transition-all duration-200 group",
+        "relative flex flex-col rounded-lg border border-cyber-grey bg-cyber-dark overflow-hidden transition-all duration-200 group",
         interactive && "cursor-pointer hover:scale-[1.02]",
         size === "sm" && "text-xs",
         size === "lg" && "text-base"
@@ -60,8 +60,8 @@ export function CardDisplay({
       {/* Card image / placeholder */}
       <div
         className={cn(
-          "w-full relative",
-          size === "sm" ? "h-20" : size === "md" ? "h-32" : "h-48"
+          "w-full relative shrink-0",
+          size === "sm" ? "aspect-[5/3]" : size === "md" ? "aspect-[4/3]" : "aspect-[3/2]"
         )}
         style={{
           background: `linear-gradient(135deg, ${colorHex}20, ${colorHex}05)`,
@@ -103,7 +103,7 @@ export function CardDisplay({
       </div>
 
       {/* Card info */}
-      <div className={cn("p-2.5", size === "sm" && "p-1.5")}>
+      <div className={cn("p-2.5 flex-1 flex flex-col min-h-0", size === "sm" && "p-1.5")}>
         {/* Name + type */}
         <div className="flex items-start justify-between gap-1 mb-1">
           <h3
@@ -169,8 +169,8 @@ export function CardDisplay({
         {card.ability_text && size !== "sm" && (
           <p
             className={cn(
-              "text-cyber-light/60 leading-snug",
-              size === "md" ? "text-xs line-clamp-2" : "text-sm"
+              "text-cyber-light/60 leading-snug mt-auto",
+              size === "md" ? "text-xs line-clamp-3" : "text-sm"
             )}
           >
             {card.ability_text}
@@ -179,7 +179,7 @@ export function CardDisplay({
 
         {/* Sell tag indicator */}
         {card.has_sell_tag && (
-          <div className="mt-1 text-[10px] font-mono text-cyber-yellow/60">
+          <div className={cn("text-[10px] font-mono text-cyber-yellow/60", card.ability_text && size !== "sm" ? "mt-1" : "mt-auto")}>
             $ SELL
           </div>
         )}
