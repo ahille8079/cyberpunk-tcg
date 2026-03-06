@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { User, Session, SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { triggerGlitchEffect } from "@/lib/glitch-effect";
 
 type OAuthProvider = "discord";
 
@@ -31,20 +32,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let initialLoad = true;
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
+      // Mark initial load complete after a tick so the
+      // onAuthStateChange listener can distinguish fresh sign-ins
+      // from session restoration on page reload.
+      setTimeout(() => { initialLoad = false; }, 500);
     });
 
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
+      // Only trigger glitch on fresh sign-ins, not session restoration
+      if (event === "SIGNED_IN" && !initialLoad) {
+        setTimeout(() => triggerGlitchEffect(), 100);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -56,6 +67,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            prompt: "none",
+          },
         },
       });
     },

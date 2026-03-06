@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAllCards } from "@/lib/cards/cards-provider";
 import type { Card, CardFilters, Deck, DeckCard } from "@/lib/cards/types";
 import { validateDeck } from "@/lib/cards/validation";
@@ -8,6 +9,7 @@ import { useLocalDecks } from "@/lib/hooks/use-local-decks";
 import { useCards } from "@/lib/hooks/use-cards";
 import { useAuth } from "@/lib/auth";
 import { saveCloudDeck } from "@/lib/supabase/deck-service";
+import { triggerGlitchEffect } from "@/lib/glitch-effect";
 import { MAX_COPIES } from "@/lib/utils";
 import { CardGrid } from "@/components/cards/card-grid";
 import { FilterSidebar } from "@/components/ui/filter-sidebar";
@@ -147,6 +149,7 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
 
   const [filters, setFilters] = useState<CardFilters>({});
   const [mobileTab, setMobileTab] = useState<MobileTab>("cards");
+  const router = useRouter();
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -191,29 +194,31 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
     updated_at: new Date().toISOString(),
   }), [state]);
 
-  const doCloudSave = useCallback(async () => {
+  const doCloudSave = useCallback(async (skipGlitch = false) => {
     if (!user) return;
     setSaving(true);
     try {
-      await saveCloudDeck(supabase, buildDeck(), user.id);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      const deck = buildDeck();
+      await saveCloudDeck(supabase, deck, user.id);
+      if (!skipGlitch) triggerGlitchEffect();
+      setTimeout(() => {
+        router.push(`/decks/${deck.id}/summary`);
+      }, skipGlitch ? 0 : 500);
     } catch (err) {
       console.error("Cloud save failed:", err);
-      // Fall back to local save
       saveLocalDeck(buildDeck());
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-    } finally {
       setSaving(false);
     }
-  }, [user, supabase, buildDeck, saveLocalDeck]);
+  }, [user, supabase, buildDeck, saveLocalDeck, router]);
 
   // Auto-save after auth completes (user clicked save while logged out)
+  // Skip glitch since auth already triggered one
   useEffect(() => {
     if (user && pendingSave.current) {
       pendingSave.current = false;
-      doCloudSave();
+      doCloudSave(true);
     }
   }, [user, doCloudSave]);
 
@@ -353,7 +358,7 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
           setShowAuthModal(false);
           pendingSave.current = false;
         }}
-        message="Sign in to save your deck to the cloud"
+        message="Jack in to save your deck to the cloud"
       />
     </div>
   );

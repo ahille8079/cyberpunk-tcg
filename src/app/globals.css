@@ -44,6 +44,78 @@
   50% { background-position: 100% 50%; }
 }
 
+@keyframes jack-in-shake {
+  0%, 100% { transform: translate(0); }
+  5% { transform: translate(-4px, 3px); }
+  10% { transform: translate(5px, -2px); }
+  15% { transform: translate(-3px, -4px); }
+  20% { transform: translate(4px, 3px); }
+  25% { transform: translate(-5px, -1px); }
+  30% { transform: translate(3px, 4px); }
+  35% { transform: translate(-2px, -3px); }
+  40% { transform: translate(4px, 2px); }
+  50% { transform: translate(-3px, -2px); }
+  60% { transform: translate(2px, 3px); }
+  70% { transform: translate(-2px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  90% { transform: translate(-1px, 1px); }
+}
+
+@keyframes jack-in-rgb-split {
+  0% { opacity: 0; }
+  5% { opacity: 1; }
+  10% { opacity: 0; }
+  15% { opacity: 0.8; }
+  20% { opacity: 0.1; }
+  30% { opacity: 1; }
+  35% { opacity: 0; }
+  45% { opacity: 0.7; }
+  50% { opacity: 0; }
+  60% { opacity: 0.5; }
+  70% { opacity: 0.1; }
+  80% { opacity: 0.3; }
+  90% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes jack-in-flicker {
+  0% { opacity: 0; }
+  3% { opacity: 0.6; }
+  6% { opacity: 0; }
+  9% { opacity: 0.4; }
+  12% { opacity: 0; }
+  40% { opacity: 0; }
+  42% { opacity: 0.3; }
+  44% { opacity: 0; }
+  80% { opacity: 0; }
+  82% { opacity: 0.5; }
+  85% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes jack-in-scanlines {
+  0% { opacity: 0; }
+  10% { opacity: 0.5; }
+  30% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+  70% { opacity: 0.7; }
+  90% { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+@keyframes jack-in-bar {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  20% { opacity: 0; }
+  35% { opacity: 1; }
+  40% { opacity: 0; }
+  55% { opacity: 1; }
+  60% { opacity: 0; }
+  75% { opacity: 0.8; }
+  80% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 @layer base {
   body {
     @apply bg-cyber-black text-cyber-light font-sans antialiased;

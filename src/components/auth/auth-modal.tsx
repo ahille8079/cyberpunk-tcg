@@ -43,7 +43,7 @@ export function AuthModal({ open, onClose, message }: AuthModalProps) {
     <dialog
       ref={dialogRef}
       onClose={onClose}
-      className="bg-transparent backdrop:bg-black/70 backdrop:backdrop-blur-sm"
+      className="bg-transparent backdrop:bg-black/70 backdrop:backdrop-blur-sm fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0"
     >
       <div className="bg-cyber-dark border border-cyber-yellow/40 rounded-lg w-[340px] max-w-[90vw] p-6 relative">
         {/* Close button */}
@@ -68,7 +68,7 @@ export function AuthModal({ open, onClose, message }: AuthModalProps) {
         )}
         {!message && (
           <p className="text-sm font-mono text-cyber-light/50 mb-5">
-            Sign in with your Discord account
+            Jack in with your Discord account
           </p>
         )}
 

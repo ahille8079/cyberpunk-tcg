@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuth, getDisplayName } from "@/lib/auth";
+import { triggerGlitchEffect, GLITCH_DURATION } from "@/lib/glitch-effect";
 import { AuthModal } from "./auth-modal";
 
 export function AuthButton() {
@@ -37,7 +38,10 @@ export function AuthButton() {
     return (
       <>
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            triggerGlitchEffect();
+            setTimeout(() => setShowModal(true), GLITCH_DURATION);
+          }}
           className="px-3 py-2 text-sm font-mono uppercase tracking-wider text-cyber-cyan hover:text-cyber-yellow transition-colors border border-cyber-cyan/40 hover:border-cyber-yellow/40 rounded min-h-[44px] flex items-center"
         >
           Jack In

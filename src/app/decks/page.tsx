@@ -148,9 +148,9 @@ export default function DecksPage() {
                 onClick={() => setShowAuthModal(true)}
                 className="text-cyber-cyan hover:text-cyber-yellow transition-colors underline underline-offset-2"
               >
-                Sign in
+                Jack in
               </button>{" "}
-              to save your decks to the cloud and access them anywhere.
+              to save your decks and access them anywhere.
             </p>
           </div>
         )}
