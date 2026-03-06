@@ -39,6 +39,7 @@ export interface Card {
 
 export interface Deck {
   id: string;
+  user_id?: string;
   name: string;
   description: string | null;
   legend_1_id: string | null;

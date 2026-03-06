@@ -1,14 +1,17 @@
 "use client";
 
-import { useCallback, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { useAllCards } from "@/lib/cards/cards-provider";
 import type { Card, CardFilters, Deck, DeckCard } from "@/lib/cards/types";
 import { validateDeck } from "@/lib/cards/validation";
 import { useLocalDecks } from "@/lib/hooks/use-local-decks";
 import { useCards } from "@/lib/hooks/use-cards";
+import { useAuth } from "@/lib/auth";
+import { saveCloudDeck } from "@/lib/supabase/deck-service";
 import { MAX_COPIES } from "@/lib/utils";
 import { CardGrid } from "@/components/cards/card-grid";
 import { FilterSidebar } from "@/components/ui/filter-sidebar";
+import { AuthModal } from "@/components/auth/auth-modal";
 import { LegendPicker } from "./legend-picker";
 import { DeckCardList } from "./deck-card-list";
 import { DeckStats } from "./deck-stats";
@@ -145,7 +148,11 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
   const [filters, setFilters] = useState<CardFilters>({});
   const [mobileTab, setMobileTab] = useState<MobileTab>("cards");
   const [saved, setSaved] = useState(false);
-  const { saveDeck } = useLocalDecks();
+  const [saving, setSaving] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const pendingSave = useRef(false);
+  const { saveDeck: saveLocalDeck } = useLocalDecks();
+  const { user, supabase } = useAuth();
 
   // Filter to non-legend cards
   const nonLegendFilters = useMemo(
@@ -171,23 +178,53 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
     [state.legends, state.cards]
   );
 
+  const buildDeck = useCallback((): Deck => ({
+    id: state.id,
+    name: state.name || "Untitled Deck",
+    description: state.description || null,
+    legend_1_id: state.legends[0]?.id ?? null,
+    legend_2_id: state.legends[1]?.id ?? null,
+    legend_3_id: state.legends[2]?.id ?? null,
+    cards: state.cards,
+    is_public: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }), [state]);
+
+  const doCloudSave = useCallback(async () => {
+    if (!user) return;
+    setSaving(true);
+    try {
+      await saveCloudDeck(supabase, buildDeck(), user.id);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      console.error("Cloud save failed:", err);
+      // Fall back to local save
+      saveLocalDeck(buildDeck());
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } finally {
+      setSaving(false);
+    }
+  }, [user, supabase, buildDeck, saveLocalDeck]);
+
+  // Auto-save after auth completes (user clicked save while logged out)
+  useEffect(() => {
+    if (user && pendingSave.current) {
+      pendingSave.current = false;
+      doCloudSave();
+    }
+  }, [user, doCloudSave]);
+
   const handleSave = useCallback(() => {
-    const deck: Deck = {
-      id: state.id,
-      name: state.name || "Untitled Deck",
-      description: state.description || null,
-      legend_1_id: state.legends[0]?.id ?? null,
-      legend_2_id: state.legends[1]?.id ?? null,
-      legend_3_id: state.legends[2]?.id ?? null,
-      cards: state.cards,
-      is_public: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    saveDeck(deck);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  }, [state, saveDeck]);
+    if (!user) {
+      pendingSave.current = true;
+      setShowAuthModal(true);
+      return;
+    }
+    doCloudSave();
+  }, [user, doCloudSave]);
 
   return (
     <div className="min-h-screen pt-14">
@@ -204,8 +241,8 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
             className="flex-1 bg-transparent text-lg font-bold text-cyber-light placeholder:text-cyber-light/20 focus:outline-none border-b border-transparent focus:border-cyber-yellow"
           />
           <div className="flex gap-2 sm:gap-4">
-            <CyberButton onClick={handleSave} variant="primary">
-              {saved ? "Saved!" : "Save Deck"}
+            <CyberButton onClick={handleSave} variant="primary" disabled={saving}>
+              {saving ? "Saving..." : saved ? "Saved!" : "Save Deck"}
             </CyberButton>
             <CyberButton
               onClick={() => dispatch({ type: "CLEAR" })}
@@ -307,6 +344,15 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
           </div>
         </div>
       </div>
+
+      <AuthModal
+        open={showAuthModal}
+        onClose={() => {
+          setShowAuthModal(false);
+          pendingSave.current = false;
+        }}
+        message="Sign in to save your deck to the cloud"
+      />
     </div>
   );
 }
