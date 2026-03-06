@@ -32,17 +32,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let initialLoad = true;
-
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
-      // Mark initial load complete after a tick so the
-      // onAuthStateChange listener can distinguish fresh sign-ins
-      // from session restoration on page reload.
-      setTimeout(() => { initialLoad = false; }, 500);
     });
 
     // Listen for auth changes
@@ -52,8 +46,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
-      // Only trigger glitch on fresh sign-ins, not session restoration
-      if (event === "SIGNED_IN" && !initialLoad) {
+      // Only trigger glitch when returning from an OAuth flow the user initiated
+      if (event === "SIGNED_IN" && sessionStorage.getItem("jack-in-pending")) {
+        sessionStorage.removeItem("jack-in-pending");
         setTimeout(() => triggerGlitchEffect(), 100);
       }
     });
@@ -63,6 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithOAuth = useCallback(
     async (provider: OAuthProvider) => {
+      sessionStorage.setItem("jack-in-pending", "1");
       await supabase.auth.signInWithOAuth({
         provider,
         options: {
