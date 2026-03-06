@@ -29,10 +29,10 @@ export function useDeckMigration() {
     if (!user) return;
     setMigrating(true);
     try {
-      for (const deck of localDecks) {
-        await saveCloudDeck(supabase, deck, user.id);
-        deleteLocalDeck(deck.id);
-      }
+      await Promise.all(
+        localDecks.map((deck) => saveCloudDeck(supabase, deck, user.id))
+      );
+      localDecks.forEach((deck) => deleteLocalDeck(deck.id));
       localStorage.setItem(MIGRATION_FLAG, "true");
       setShowPrompt(false);
     } catch (err) {

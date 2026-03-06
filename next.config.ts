@@ -1,15 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "gwupeldmdknkipmnuiwt.supabase.co",
-        pathname: "/storage/v1/object/public/**",
-      },
-    ],
-  },
+  // Deliberately not using next/image — card images served via R2 / Cloudflare
+  // with plain <img> tags to avoid Vercel image-optimization costs.
 };
 
 export default nextConfig;

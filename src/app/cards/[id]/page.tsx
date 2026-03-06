@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cards, getPrintings, fetchAllCards, fetchCardById } from "@/data/cards";
+import { cards, getCardById, getPrintings } from "@/data/cards";
 import { PrintingSelector } from "@/components/cards/printing-selector";
 import { COLOR_HEX } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const card = await fetchCardById(id);
+  const card = getCardById(id);
   if (!card) return { title: "Card Not Found" };
 
   return {
@@ -36,12 +36,11 @@ const rarityLabels: Record<string, string> = {
 
 export default async function CardPage({ params }: Props) {
   const { id } = await params;
-  const allCards = await fetchAllCards();
-  const card = allCards.find((c) => c.id === id);
+  const card = getCardById(id);
   if (!card) notFound();
 
   const colorHex = COLOR_HEX[card.color] ?? "#d1d5db";
-  const printings = getPrintings(card.name, allCards);
+  const printings = getPrintings(card.name);
 
   return (
     <div className="min-h-screen pt-14">

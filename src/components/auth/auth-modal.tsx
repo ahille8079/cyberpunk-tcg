@@ -81,7 +81,7 @@ export function AuthModal({ open, onClose, message }: AuthModalProps) {
               className="w-full flex items-center gap-3 px-4 py-3 rounded font-mono text-sm font-semibold tracking-wider transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               style={{
                 backgroundColor: provider.color,
-                color: provider.textColor ?? "#ffffff",
+                color: "#ffffff",
               }}
             >
               {provider.icon}
