@@ -36,23 +36,23 @@ export function StashCardOverlay({
           <div className="flex items-center gap-3 mb-3">
             <button
               onClick={() => onSetQuantity(Math.max(0, quantity - 1))}
-              className="w-9 h-9 flex items-center justify-center text-sm font-mono bg-cyber-grey rounded hover:bg-cyber-magenta/20 hover:text-cyber-magenta transition-colors"
+              className="w-10 h-10 flex items-center justify-center text-base font-mono bg-cyber-grey rounded-lg hover:bg-cyber-magenta/20 hover:text-cyber-magenta transition-colors"
             >
               -
             </button>
-            <span className="text-xl font-mono font-bold text-cyber-yellow min-w-[2ch] text-center">
+            <span className="text-2xl font-mono font-bold text-cyber-yellow min-w-[2ch] text-center">
               {quantity}
             </span>
             <button
               onClick={() => onSetQuantity(quantity + 1)}
-              className="w-9 h-9 flex items-center justify-center text-sm font-mono bg-cyber-grey rounded hover:bg-cyber-cyan/20 hover:text-cyber-cyan transition-colors"
+              className="w-10 h-10 flex items-center justify-center text-base font-mono bg-cyber-grey rounded-lg hover:bg-cyber-cyan/20 hover:text-cyber-cyan transition-colors"
             >
               +
             </button>
           </div>
           <button
             onClick={onRemove}
-            className="text-[10px] font-mono text-cyber-light/30 hover:text-cyber-magenta transition-colors"
+            className="text-xs font-mono text-cyber-light/40 hover:text-cyber-magenta transition-colors"
           >
             Remove
           </button>
@@ -61,12 +61,12 @@ export function StashCardOverlay({
         <>
           {/* Printing selector */}
           {hasPrintings && (
-            <div className="flex gap-1 mb-3">
+            <div className="flex gap-1.5 mb-3">
               {printings.map((p) => (
                 <button
                   key={p.id}
                   onClick={() => setSelectedPrintingId(p.id)}
-                  className={`px-2.5 py-1 text-[10px] font-mono uppercase rounded border transition-colors ${
+                  className={`px-3 py-1.5 text-xs font-mono uppercase rounded border transition-colors ${
                     selectedPrintingId === p.id
                       ? p.printing === "foil"
                         ? "border-cyber-yellow text-cyber-yellow bg-cyber-yellow/10"
@@ -83,23 +83,23 @@ export function StashCardOverlay({
           <div className="flex items-center gap-3 mb-3">
             <button
               onClick={() => setPendingQty((q) => Math.max(1, q - 1))}
-              className="w-9 h-9 flex items-center justify-center text-sm font-mono bg-cyber-grey rounded hover:bg-cyber-magenta/20 hover:text-cyber-magenta transition-colors"
+              className="w-10 h-10 flex items-center justify-center text-base font-mono bg-cyber-grey rounded-lg hover:bg-cyber-magenta/20 hover:text-cyber-magenta transition-colors"
             >
               -
             </button>
-            <span className="text-xl font-mono font-bold text-cyber-cyan min-w-[2ch] text-center">
+            <span className="text-2xl font-mono font-bold text-cyber-cyan min-w-[2ch] text-center">
               {pendingQty}
             </span>
             <button
               onClick={() => setPendingQty((q) => q + 1)}
-              className="w-9 h-9 flex items-center justify-center text-sm font-mono bg-cyber-grey rounded hover:bg-cyber-cyan/20 hover:text-cyber-cyan transition-colors"
+              className="w-10 h-10 flex items-center justify-center text-base font-mono bg-cyber-grey rounded-lg hover:bg-cyber-cyan/20 hover:text-cyber-cyan transition-colors"
             >
               +
             </button>
           </div>
           <button
             onClick={() => onAdd(selectedPrintingId, pendingQty)}
-            className="px-4 py-2 text-xs font-mono uppercase tracking-wider bg-cyber-cyan/10 border border-cyber-cyan/40 text-cyber-cyan rounded hover:bg-cyber-cyan/20 transition-colors"
+            className="px-5 py-2.5 text-sm font-mono uppercase tracking-wider bg-cyber-cyan/10 border border-cyber-cyan/40 text-cyber-cyan rounded-lg hover:bg-cyber-cyan/20 transition-colors"
           >
             Add to Stash
           </button>

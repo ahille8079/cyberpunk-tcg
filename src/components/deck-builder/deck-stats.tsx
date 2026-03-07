@@ -44,7 +44,7 @@ export function DeckStats({ validation }: DeckStatsProps) {
       {/* Total cards */}
       <div className="p-3 bg-cyber-dark/50 border border-cyber-grey rounded-lg">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs font-mono uppercase text-cyber-light/50">
+          <span className="text-sm font-mono uppercase text-cyber-light/50">
             Total Cards
           </span>
           <span
@@ -75,7 +75,7 @@ export function DeckStats({ validation }: DeckStatsProps) {
       {/* RAM Budget */}
       {Object.keys(stats.ramBudgetByColor).length > 0 && (
         <div className="p-3 bg-cyber-dark/50 border border-cyber-grey rounded-lg">
-          <h3 className="text-xs font-mono uppercase text-cyber-light/50 mb-2">
+          <h3 className="text-sm font-mono uppercase text-cyber-light/50 mb-2">
             RAM Budget
           </h3>
           <div className="space-y-2">
@@ -120,7 +120,7 @@ export function DeckStats({ validation }: DeckStatsProps) {
       {/* Eddie Cost Curve */}
       {costCurveData.length > 0 && (
         <div className="p-3 bg-cyber-dark/50 border border-cyber-grey rounded-lg">
-          <h3 className="text-xs font-mono uppercase text-cyber-light/50 mb-2">
+          <h3 className="text-sm font-mono uppercase text-cyber-light/50 mb-2">
             Eddie Cost Curve
           </h3>
           <ResponsiveContainer width="100%" height={120}>
@@ -150,7 +150,7 @@ export function DeckStats({ validation }: DeckStatsProps) {
       {/* Type Distribution */}
       {typeData.length > 0 && (
         <div className="p-3 bg-cyber-dark/50 border border-cyber-grey rounded-lg">
-          <h3 className="text-xs font-mono uppercase text-cyber-light/50 mb-2">
+          <h3 className="text-sm font-mono uppercase text-cyber-light/50 mb-2">
             Type Distribution
           </h3>
           <div className="flex items-center gap-4">
@@ -194,7 +194,7 @@ export function DeckStats({ validation }: DeckStatsProps) {
       {/* Color Distribution */}
       {colorData.length > 0 && (
         <div className="p-3 bg-cyber-dark/50 border border-cyber-grey rounded-lg">
-          <h3 className="text-xs font-mono uppercase text-cyber-light/50 mb-2">
+          <h3 className="text-sm font-mono uppercase text-cyber-light/50 mb-2">
             Color Distribution
           </h3>
           <div className="flex items-center gap-4">
@@ -241,7 +241,7 @@ export function DeckStats({ validation }: DeckStatsProps) {
       {/* Quick Stats */}
       <div className="p-3 bg-cyber-dark/50 border border-cyber-grey rounded-lg grid grid-cols-2 gap-3">
         <div>
-          <div className="text-[10px] font-mono uppercase text-cyber-light/40">
+          <div className="text-xs font-mono uppercase text-cyber-light/40">
             Sell Tags
           </div>
           <div
@@ -255,7 +255,7 @@ export function DeckStats({ validation }: DeckStatsProps) {
           </div>
         </div>
         <div>
-          <div className="text-[10px] font-mono uppercase text-cyber-light/40">
+          <div className="text-xs font-mono uppercase text-cyber-light/40">
             Blockers
           </div>
           <div

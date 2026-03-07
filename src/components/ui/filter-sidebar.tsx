@@ -36,7 +36,7 @@ const rarities: { value: CardRarity; label: string }[] = [
 
 const sortOptions = [
   { value: "name", label: "Name" },
-  { value: "eddie_cost", label: "Eddie Cost" },
+  { value: "eddie_cost", label: "Cost" },
   { value: "power", label: "Power" },
   { value: "rarity", label: "Rarity" },
 ];
@@ -63,129 +63,120 @@ export function FilterSidebar({
     [filters, onFilterChange]
   );
 
+  const hasActiveFilters =
+    filters.card_type || filters.color || filters.rarity || filters.search;
+
   return (
-    <div className={cn("space-y-5 p-4 bg-cyber-dark/50 border border-cyber-grey rounded-lg", className)}>
-      {/* Search */}
-      <div>
-        <label className="block text-xs font-mono uppercase text-cyber-light/60 mb-1.5">
-          Search
-        </label>
+    <div
+      className={cn(
+        "space-y-2 p-3 bg-cyber-dark/50 border border-cyber-grey rounded-lg",
+        className
+      )}
+    >
+      {/* Row 1: Search + Sort */}
+      <div className="flex gap-2">
         <input
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Card name or keyword..."
-          className="w-full bg-cyber-black border border-cyber-grey rounded px-3 py-2 text-sm text-cyber-light placeholder:text-cyber-light/30 focus:border-cyber-yellow focus:outline-none"
+          placeholder="Search cards..."
+          className="flex-1 min-w-0 bg-cyber-black border border-cyber-grey rounded px-2.5 py-1.5 text-xs text-cyber-light placeholder:text-cyber-light/30 focus:border-cyber-yellow focus:outline-none"
         />
-      </div>
-
-      {/* Card Type */}
-      <div>
-        <label className="block text-xs font-mono uppercase text-cyber-light/60 mb-1.5">
-          Type
-        </label>
-        <div className="flex flex-wrap gap-1.5">
-          {cardTypes.map((t) => (
-            <button
-              key={t.value}
-              onClick={() =>
-                setFilter("card_type", filters.card_type === t.value ? null : t.value)
-              }
-              className={cn(
-                "px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs font-mono rounded border transition-colors",
-                filters.card_type === t.value
-                  ? "border-cyber-yellow bg-cyber-yellow/10 text-cyber-yellow"
-                  : "border-cyber-grey text-cyber-light/60 hover:border-cyber-light/40"
-              )}
-            >
-              {t.label}
-            </button>
+        <select
+          value={filters.sortBy ?? "name"}
+          onChange={(e) => setFilter("sortBy", e.target.value)}
+          className="bg-cyber-black border border-cyber-grey rounded px-2 py-1.5 text-xs text-cyber-light focus:border-cyber-yellow focus:outline-none"
+        >
+          {sortOptions.map((s) => (
+            <option key={s.value} value={s.value}>
+              {s.label}
+            </option>
           ))}
-        </div>
+        </select>
+        <button
+          onClick={() =>
+            setFilter("sortDir", filters.sortDir === "asc" ? "desc" : "asc")
+          }
+          className="px-2 py-1.5 bg-cyber-black border border-cyber-grey rounded text-xs text-cyber-light hover:border-cyber-yellow"
+        >
+          {filters.sortDir === "desc" ? "\u2193" : "\u2191"}
+        </button>
       </div>
 
-      {/* Color */}
-      <div>
-        <label className="block text-xs font-mono uppercase text-cyber-light/60 mb-1.5">
-          Color
-        </label>
-        <div className="flex gap-2">
-          {cardColors.map((c) => (
-            <button
-              key={c.value}
-              onClick={() =>
-                setFilter("color", filters.color === c.value ? null : c.value)
-              }
-              className={cn(
-                "w-10 h-10 sm:w-8 sm:h-8 rounded-full border-2 transition-all",
-                filters.color === c.value
-                  ? "scale-110 border-white"
-                  : "border-transparent opacity-60 hover:opacity-100"
-              )}
-              style={{ backgroundColor: COLOR_HEX[c.value] }}
-              title={c.label}
-            />
-          ))}
-        </div>
-      </div>
+      {/* Row 2: Type pills + Color dots + Rarity + Clear */}
+      <div className="flex flex-wrap items-center gap-1.5">
+        {/* Type pills */}
+        {cardTypes.map((t) => (
+          <button
+            key={t.value}
+            onClick={() =>
+              setFilter(
+                "card_type",
+                filters.card_type === t.value ? null : t.value
+              )
+            }
+            className={cn(
+              "px-2 py-0.5 text-[10px] font-mono rounded border transition-colors",
+              filters.card_type === t.value
+                ? "border-cyber-yellow bg-cyber-yellow/10 text-cyber-yellow"
+                : "border-cyber-grey/60 text-cyber-light/50 hover:border-cyber-light/40"
+            )}
+          >
+            {t.label}
+          </button>
+        ))}
 
-      {/* Rarity */}
-      <div>
-        <label className="block text-xs font-mono uppercase text-cyber-light/60 mb-1.5">
-          Rarity
-        </label>
+        {/* Separator */}
+        <span className="w-px h-4 bg-cyber-grey/50 mx-0.5" />
+
+        {/* Color dots */}
+        {cardColors.map((c) => (
+          <button
+            key={c.value}
+            onClick={() =>
+              setFilter("color", filters.color === c.value ? null : c.value)
+            }
+            className={cn(
+              "w-5 h-5 rounded-full border-2 transition-all",
+              filters.color === c.value
+                ? "scale-110 border-white"
+                : "border-transparent opacity-50 hover:opacity-100"
+            )}
+            style={{ backgroundColor: COLOR_HEX[c.value] }}
+            title={c.label}
+          />
+        ))}
+
+        {/* Separator */}
+        <span className="w-px h-4 bg-cyber-grey/50 mx-0.5" />
+
+        {/* Rarity dropdown */}
         <select
           value={filters.rarity ?? ""}
           onChange={(e) => setFilter("rarity", e.target.value || null)}
-          className="w-full bg-cyber-black border border-cyber-grey rounded px-3 py-2 text-sm text-cyber-light focus:border-cyber-yellow focus:outline-none"
+          className="bg-cyber-black border border-cyber-grey/60 rounded px-1.5 py-0.5 text-[10px] font-mono text-cyber-light focus:border-cyber-yellow focus:outline-none"
         >
-          <option value="">All Rarities</option>
+          <option value="">Rarity</option>
           {rarities.map((r) => (
             <option key={r.value} value={r.value}>
               {r.label}
             </option>
           ))}
         </select>
-      </div>
 
-      {/* Sort */}
-      <div>
-        <label className="block text-xs font-mono uppercase text-cyber-light/60 mb-1.5">
-          Sort By
-        </label>
-        <div className="flex gap-2">
-          <select
-            value={filters.sortBy ?? "name"}
-            onChange={(e) => setFilter("sortBy", e.target.value)}
-            className="flex-1 bg-cyber-black border border-cyber-grey rounded px-3 py-2 text-sm text-cyber-light focus:border-cyber-yellow focus:outline-none"
-          >
-            {sortOptions.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
+        {/* Clear */}
+        {hasActiveFilters && (
           <button
-            onClick={() =>
-              setFilter("sortDir", filters.sortDir === "asc" ? "desc" : "asc")
-            }
-            className="px-3 py-2 bg-cyber-black border border-cyber-grey rounded text-sm text-cyber-light hover:border-cyber-yellow"
+            onClick={() => {
+              setSearchInput("");
+              onFilterChange({});
+            }}
+            className="text-[10px] font-mono text-cyber-light/30 hover:text-cyber-magenta transition-colors ml-auto"
           >
-            {filters.sortDir === "desc" ? "↓" : "↑"}
+            Clear
           </button>
-        </div>
+        )}
       </div>
-
-      {/* Clear */}
-      <button
-        onClick={() => {
-          setSearchInput("");
-          onFilterChange({});
-        }}
-        className="w-full text-xs font-mono uppercase text-cyber-light/40 hover:text-cyber-magenta transition-colors"
-      >
-        Clear Filters
-      </button>
     </div>
   );
 }

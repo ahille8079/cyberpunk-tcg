@@ -10,13 +10,14 @@ import { useCards } from "@/lib/hooks/use-cards";
 import { useAuth } from "@/lib/auth";
 import { saveCloudDeck, DeckLimitError } from "@/lib/supabase/deck-service";
 import { triggerGlitchEffect, GLITCH_DURATION } from "@/lib/glitch-effect";
-import { MAX_COPIES } from "@/lib/utils";
+import { MAX_COPIES, COLOR_HEX, DECK_MIN_CARDS, DECK_MAX_CARDS } from "@/lib/utils";
 import { CardGrid } from "@/components/cards/card-grid";
 import { FilterSidebar } from "@/components/ui/filter-sidebar";
 import { AuthModal } from "@/components/auth/auth-modal";
 import { LegendPicker } from "./legend-picker";
 import { DeckCardList } from "./deck-card-list";
 import { DeckStats } from "./deck-stats";
+import { EconomyTimeline } from "./economy-timeline";
 import { CyberButton } from "@/components/ui/cyber-button";
 
 // State
@@ -166,6 +167,26 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
     (c) => c.card_type !== "legend"
   );
 
+  // Auto-sort cards by legend colors (most-selected color first)
+  const sortedCards = useMemo(() => {
+    if (state.legends.length === 0) return filteredCards;
+    const colorCounts: Record<string, number> = {};
+    for (const l of state.legends) {
+      colorCounts[l.color] = (colorCounts[l.color] ?? 0) + 1;
+    }
+    const legendColors = Object.entries(colorCounts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([color]) => color);
+
+    return [...filteredCards].sort((a, b) => {
+      const aIdx = legendColors.indexOf(a.color);
+      const bIdx = legendColors.indexOf(b.color);
+      const aPri = aIdx >= 0 ? aIdx : legendColors.length;
+      const bPri = bIdx >= 0 ? bIdx : legendColors.length;
+      return aPri - bPri;
+    });
+  }, [filteredCards, state.legends]);
+
   // Quantities map for card grid
   const quantities = useMemo(() => {
     const map: Record<string, number> = {};
@@ -273,6 +294,94 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
         </div>
       </div>
 
+      {/* Stats Dashboard Strip */}
+      <div className="bg-cyber-dark/50 border-b border-cyber-grey">
+        <div className="max-w-[1600px] mx-auto px-4 py-2.5">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {/* Total Cards */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono uppercase text-cyber-light/40">Cards</span>
+              <span
+                className={`text-base font-mono font-bold ${
+                  validation.stats.totalCards >= DECK_MIN_CARDS &&
+                  validation.stats.totalCards <= DECK_MAX_CARDS
+                    ? "text-cyber-cyan"
+                    : "text-cyber-magenta"
+                }`}
+              >
+                {validation.stats.totalCards}
+              </span>
+              <span className="text-xs font-mono text-cyber-light/30">
+                /{DECK_MAX_CARDS}
+              </span>
+            </div>
+
+            {/* RAM Budget inline */}
+            {Object.entries(validation.stats.ramBudgetByColor).map(
+              ([color, budget]) => (
+                <div key={color} className="flex items-center gap-1.5">
+                  <span
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{ backgroundColor: COLOR_HEX[color] ?? "#d1d5db" }}
+                  />
+                  <span
+                    className={`text-sm font-mono font-bold ${
+                      budget.used > budget.provided
+                        ? "text-cyber-magenta"
+                        : "text-cyber-light/70"
+                    }`}
+                  >
+                    {budget.used}/{budget.provided}
+                  </span>
+                </div>
+              )
+            )}
+
+            {/* Sell Tags */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-mono uppercase text-cyber-light/40">Sell</span>
+              <span
+                className={`text-sm font-mono font-bold ${
+                  validation.stats.sellTagRatio < 0.25
+                    ? "text-cyber-magenta"
+                    : validation.stats.sellTagRatio < 0.3
+                      ? "text-cyber-yellow"
+                      : "text-cyber-light/70"
+                }`}
+              >
+                {Math.round(validation.stats.sellTagRatio * 100)}%
+              </span>
+            </div>
+
+            {/* Blockers */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-mono uppercase text-cyber-light/40">Blockers</span>
+              <span
+                className={`text-sm font-mono font-bold ${
+                  validation.stats.blockerCount < 4
+                    ? "text-cyber-yellow"
+                    : "text-cyber-light/70"
+                }`}
+              >
+                {validation.stats.blockerCount}
+              </span>
+            </div>
+
+            {/* Errors / Warnings count */}
+            {validation.errors.length > 0 && (
+              <span className="text-xs font-mono text-cyber-magenta">
+                {validation.errors.length} error{validation.errors.length !== 1 ? "s" : ""}
+              </span>
+            )}
+            {validation.warnings.length > 0 && (
+              <span className="text-xs font-mono text-cyber-yellow/70">
+                {validation.warnings.length} warning{validation.warnings.length !== 1 ? "s" : ""}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Mobile tab bar */}
       <div className="lg:hidden flex border-b border-cyber-grey">
         {(
@@ -321,14 +430,13 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
               mobileTab === "cards" ? "block" : "hidden"
             } lg:block min-w-0`}
           >
-            <div className="mb-4">
-              <FilterSidebar
-                filters={filters}
-                onFilterChange={setFilters}
-              />
-            </div>
+            <FilterSidebar
+              filters={filters}
+              onFilterChange={setFilters}
+              className="mb-3"
+            />
             <CardGrid
-              cards={filteredCards}
+              cards={sortedCards}
               onCardClick={(card) => dispatch({ type: "ADD_CARD", card })}
               showQuantities={quantities}
               cardSize="sm"
@@ -336,7 +444,7 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
             />
           </div>
 
-          {/* Right: Deck List + Stats */}
+          {/* Right: Deck List + Stats + Economy */}
           <div
             className={`${
               mobileTab === "deck" ? "block" : "hidden"
@@ -357,6 +465,12 @@ export function DeckEditor({ initialDeck }: DeckEditorProps) {
                   const legend = state.legends.find((l) => l.id === cardId);
                   if (legend) dispatch({ type: "TOGGLE_LEGEND", card: legend });
                 }}
+                onRequestLegendPick={() => setMobileTab("legends")}
+              />
+              <EconomyTimeline
+                deckCards={state.cards}
+                allCards={allCards}
+                legendCount={state.legends.length}
               />
               <DeckStats validation={validation} />
             </div>

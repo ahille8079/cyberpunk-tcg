@@ -7,9 +7,8 @@ import { useStash } from "@/lib/hooks/use-stash";
 import { useCards } from "@/lib/hooks/use-cards";
 import { FilterSidebar } from "@/components/ui/filter-sidebar";
 import { CardDisplay } from "@/components/cards/card-display";
-import { StashStats } from "./stash-stats";
+import { CollectionShowcase } from "./collection-showcase";
 import { StashCardOverlay } from "./stash-card-overlay";
-import { StashDock } from "./stash-dock";
 import { cn } from "@/lib/utils";
 import type { Card, CardFilters } from "@/lib/cards/types";
 
@@ -22,6 +21,7 @@ export function StashView() {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [flashCardId, setFlashCardId] = useState<string | null>(null);
+  const [stashExpanded, setStashExpanded] = useState(false);
   const flashTimeout = useRef<ReturnType<typeof setTimeout>>(null);
 
   // For search highlight — only look at unowned cards
@@ -142,22 +142,22 @@ export function StashView() {
 
   return (
     <div className="space-y-6">
-      <StashStats allCards={allCards} stash={stash} />
-
-      {/* Inline stash dock — collapsible panel */}
-      <StashDock
+      <CollectionShowcase
+        allCards={allCards}
         stash={stash}
-        onSetQuantity={setQuantity}
-        onRemove={removeCard}
         flashCardId={flashCardId}
+        expanded={stashExpanded}
+        onExpandedChange={setStashExpanded}
+        onRemove={removeCard}
+        onSetQuantity={setQuantity}
       />
 
-      {/* Filter toggle (mobile) + filter sidebar + card grid */}
-      <div className="lg:flex lg:gap-6">
+      {/* Filter toggle (mobile) + filter sidebar + card grid — hidden when stash is expanded */}
+      {!stashExpanded && <div className="lg:flex lg:gap-6">
         <div className="lg:w-64 shrink-0">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="lg:hidden w-full mb-3 px-3 py-2 text-xs font-mono uppercase tracking-wider border border-cyber-grey rounded text-cyber-light/60 hover:border-cyber-yellow/40 transition-colors"
+            className="lg:hidden w-full mb-3 px-3 py-2.5 text-sm font-mono uppercase tracking-wider border border-cyber-grey rounded text-cyber-light/60 hover:border-cyber-yellow/40 transition-colors"
           >
             {showFilters ? "Hide Filters" : "Show Filters"}
           </button>
@@ -182,7 +182,7 @@ export function StashView() {
             </div>
           )}
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

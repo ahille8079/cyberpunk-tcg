@@ -14,10 +14,10 @@ interface CardDisplayProps {
 }
 
 const typeIcons: Record<string, string> = {
-  legend: "★",
-  unit: "⚔",
-  gear: "⚙",
-  program: "◈",
+  legend: "\u2605",
+  unit: "\u2694",
+  gear: "\u2699",
+  program: "\u25C8",
 };
 
 const rarityColors = colors.rarity;
@@ -39,15 +39,11 @@ export function CardDisplay({
       className={cn(
         "relative flex flex-col rounded-lg border border-cyber-grey bg-cyber-dark overflow-hidden transition-all duration-200 group",
         interactive && "cursor-pointer hover:scale-[1.02]",
-        size === "sm" && "text-xs",
         size === "lg" && "text-base"
       )}
       style={{
         borderLeftWidth: "3px",
         borderLeftColor: colorHex,
-        ...(interactive
-          ? {}
-          : {}),
       }}
       onMouseEnter={(e) => {
         if (interactive) {
@@ -86,51 +82,68 @@ export function CardDisplay({
             >
               {typeIcons[card.card_type] ?? "?"}
             </div>
-            <div
-              className="text-[9px] font-mono uppercase tracking-widest"
-              style={{ color: `${colorHex}30` }}
-            >
-              No Image
-            </div>
-          </div>
-        )}
-
-        {/* Eddie cost badge */}
-        {card.eddie_cost > 0 && (
-          <div className="absolute top-1.5 right-1.5 bg-cyber-black/80 border border-cyber-yellow/50 rounded px-1.5 py-0.5 text-xs font-mono text-cyber-yellow">
-            {card.eddie_cost}E
-          </div>
-        )}
-
-        {/* RAM cost badge */}
-        {card.ram_cost != null && (
-          <div className="absolute top-1.5 left-1.5 bg-cyber-black/80 border border-cyber-cyan/50 rounded px-1.5 py-0.5 text-xs font-mono text-cyber-cyan">
-            {card.ram_cost}R
-          </div>
-        )}
-
-        {/* Quantity badge */}
-        {showQuantity != null && showQuantity > 1 && (
-          <div className="absolute bottom-1.5 right-1.5 bg-cyber-magenta text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
-            x{showQuantity}
           </div>
         )}
       </div>
 
+      {/* Cost strip — sits between image and card info, always readable */}
+      <div className="flex items-center gap-1.5 px-2 py-1 bg-cyber-black/90 border-b border-cyber-grey/40">
+        {card.ram_cost != null && (
+          <span className={cn(
+            "font-mono font-bold text-cyber-cyan",
+            size === "sm" ? "text-xs" : "text-sm"
+          )}>
+            {card.ram_cost}R
+          </span>
+        )}
+        {card.eddie_cost > 0 && (
+          <span className={cn(
+            "font-mono font-bold text-cyber-yellow",
+            size === "sm" ? "text-xs" : "text-sm"
+          )}>
+            {card.eddie_cost}E
+          </span>
+        )}
+        {showQuantity != null && showQuantity > 1 && (
+          <span className={cn(
+            "font-mono font-bold text-cyber-magenta ml-auto",
+            size === "sm" ? "text-xs" : "text-sm"
+          )}>
+            x{showQuantity}
+          </span>
+        )}
+        {/* Rarity dot — far right */}
+        <span
+          className={cn(
+            "rounded-full shrink-0",
+            showQuantity == null || showQuantity <= 1 ? "ml-auto" : "",
+            size === "sm" ? "w-2 h-2" : "w-2.5 h-2.5"
+          )}
+          style={{ backgroundColor: rarityColors[card.rarity] }}
+          title={card.rarity}
+        />
+      </div>
+
       {/* Card info */}
-      <div className={cn("p-2.5 flex-1 flex flex-col min-h-0", size === "sm" && "p-1.5")}>
+      <div className={cn(
+        "flex-1 flex flex-col min-h-0",
+        size === "sm" ? "p-2" : "p-2.5"
+      )}>
         {/* Name + type */}
         <div className="flex items-start justify-between gap-1 mb-1">
           <h3
             className={cn(
               "font-bold text-cyber-light leading-tight",
-              size === "sm" ? "text-xs" : "text-sm"
+              size === "sm" ? "text-sm" : "text-base"
             )}
           >
             {card.name}
           </h3>
           <span
-            className="shrink-0 text-[10px] font-mono uppercase px-1 py-0.5 rounded"
+            className={cn(
+              "shrink-0 font-mono uppercase rounded",
+              size === "sm" ? "text-[11px] px-1.5 py-0.5" : "text-xs px-1.5 py-0.5"
+            )}
             style={{
               backgroundColor: `${colorHex}20`,
               color: colorHex,
@@ -140,29 +153,30 @@ export function CardDisplay({
           </span>
         </div>
 
-        {/* Power + rarity */}
+        {/* Power + RAM provided */}
         <div className="flex items-center gap-2 mb-1.5">
           {card.power != null && (
-            <span className="text-xs font-mono text-cyber-light/80">
+            <span className={cn(
+              "font-mono text-cyber-light/80",
+              size === "sm" ? "text-xs" : "text-sm"
+            )}>
               PWR {card.power}
             </span>
           )}
           {card.ram_provided != null && (
-            <span className="text-xs font-mono text-cyber-cyan">
+            <span className={cn(
+              "font-mono text-cyber-cyan",
+              size === "sm" ? "text-xs" : "text-sm"
+            )}>
               +{card.ram_provided} RAM
             </span>
           )}
-          <span
-            className="w-2 h-2 rounded-full ml-auto shrink-0"
-            style={{ backgroundColor: rarityColors[card.rarity] }}
-            title={card.rarity}
-          />
         </div>
 
         {/* Classification */}
         {card.classification.length > 0 && size !== "sm" && (
-          <div className="text-[10px] font-mono text-cyber-light/50 mb-1">
-            {card.classification.join(" · ")}
+          <div className="text-xs font-mono text-cyber-light/50 mb-1">
+            {card.classification.join(" \u00B7 ")}
           </div>
         )}
 
@@ -172,7 +186,7 @@ export function CardDisplay({
             {card.keywords.map((kw) => (
               <span
                 key={kw}
-                className="text-[10px] font-mono px-1.5 py-0.5 bg-cyber-grey rounded text-cyber-light/70"
+                className="text-xs font-mono px-1.5 py-0.5 bg-cyber-grey rounded text-cyber-light/70"
               >
                 {kw}
               </span>
@@ -185,7 +199,7 @@ export function CardDisplay({
           <p
             className={cn(
               "text-cyber-light/60 leading-snug mt-auto",
-              size === "md" ? "text-xs line-clamp-3" : "text-sm"
+              size === "md" ? "text-sm line-clamp-3" : "text-base"
             )}
           >
             {card.ability_text}
@@ -194,7 +208,11 @@ export function CardDisplay({
 
         {/* Sell tag indicator */}
         {card.has_sell_tag && (
-          <div className={cn("text-[10px] font-mono text-cyber-yellow/60", card.ability_text && size !== "sm" ? "mt-1" : "mt-auto")}>
+          <div className={cn(
+            "font-mono text-cyber-yellow/60",
+            size === "sm" ? "text-xs" : "text-sm",
+            card.ability_text && size !== "sm" ? "mt-1" : "mt-auto"
+          )}>
             $ SELL
           </div>
         )}

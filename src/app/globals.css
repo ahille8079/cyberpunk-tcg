@@ -18,6 +18,10 @@
   --animate-scanline: scanline 6s linear infinite;
   --animate-neon-pulse: neon-pulse 2s ease-in-out infinite alternate;
   --animate-gradient-shift: gradient-shift 8s ease infinite;
+  --animate-stash-pop: stash-pop 500ms ease-out;
+  --animate-counter-tick: counter-tick 300ms ease-out;
+  --animate-bar-pulse: bar-edge-pulse 600ms ease-out;
+  --animate-shimmer: shimmer 1s ease-out;
 }
 
 @keyframes glitch {
@@ -71,6 +75,37 @@
   100% { opacity: 0; }
 }
 
+@keyframes stash-pop {
+  0% { transform: scale(1.25); opacity: 0.5; filter: brightness(1.8); }
+  50% { transform: scale(0.95); opacity: 1; filter: brightness(1.2); }
+  100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+}
+
+@keyframes counter-tick {
+  0% { transform: scaleY(1); }
+  40% { transform: scaleY(1.2); }
+  100% { transform: scaleY(1); }
+}
+
+@keyframes bar-edge-pulse {
+  0% { box-shadow: 0 0 8px 2px #fcee09, 0 0 16px 4px #fcee0966; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-stash-pop,
+  .animate-counter-tick,
+  .animate-bar-pulse,
+  .animate-shimmer {
+    animation: none !important;
+  }
+}
+
 @layer base {
   body {
     @apply bg-cyber-black text-cyber-light font-sans antialiased;
@@ -115,6 +150,13 @@
       rgba(0, 0, 0, 0.1) 4px
     );
     pointer-events: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
   .clip-corner {
     clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
