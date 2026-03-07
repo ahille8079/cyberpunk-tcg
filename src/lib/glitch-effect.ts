@@ -85,6 +85,9 @@ export function triggerGlitchEffect(): void {
   if (typeof document === "undefined") return;
   if (document.getElementById("jack-in-glitch")) return;
 
+  // Respect OS-level reduced-motion preference (WCAG 2.3.1)
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
   const cleanups: (() => void)[] = [];
 
   const overlay = document.createElement("div");

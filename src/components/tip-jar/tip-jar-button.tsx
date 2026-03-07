@@ -10,7 +10,7 @@ export function TipJarButton() {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="px-3 py-2 text-sm font-mono uppercase tracking-wider text-cyber-yellow hover:text-cyber-black hover:bg-cyber-yellow transition-colors border border-cyber-yellow/40 hover:border-cyber-yellow rounded min-h-[44px] flex items-center cursor-pointer"
+        className="px-3 py-1.5 text-xs font-mono uppercase tracking-wider text-cyber-yellow/70 hover:text-cyber-yellow transition-colors rounded flex items-center gap-1.5 cursor-pointer"
       >
         <span className="hidden lg:inline">Slide Me Some Eddies</span>
         <span className="lg:hidden">Eddies</span>
