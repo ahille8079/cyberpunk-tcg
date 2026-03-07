@@ -186,6 +186,15 @@ export function StashDock({
                       >
                         {card.card_type}
                       </span>
+                      <span
+                        className={`text-[10px] font-mono uppercase ${
+                          card.printing === "foil"
+                            ? "text-cyber-yellow/70"
+                            : "text-cyber-light/30"
+                        }`}
+                      >
+                        {card.printing}
+                      </span>
                       {card.eddie_cost > 0 && (
                         <span className="text-[10px] font-mono text-cyber-yellow/60">
                           {card.eddie_cost}E

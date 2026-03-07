@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, useRef } from "react";
 import { useAllCards } from "@/lib/cards/cards-provider";
-import { getUniqueCards } from "@/data/cards";
+import { getUniqueCards, getPrintings } from "@/data/cards";
 import { useStash } from "@/lib/hooks/use-stash";
 import { useCards } from "@/lib/hooks/use-cards";
 import { FilterSidebar } from "@/components/ui/filter-sidebar";
@@ -49,7 +49,7 @@ export function StashView() {
       setSelectedCardId(null);
       triggerFlash(cardId);
     },
-    [addCard, triggerFlash]
+    [addCard, triggerFlash],
   );
 
   // Highlight the best-match unowned card as the user types
@@ -124,7 +124,8 @@ export function StashView() {
         {isSelected && (
           <StashCardOverlay
             quantity={qty}
-            onAdd={(pendingQty) => handleAddCard(card.id, pendingQty)}
+            printings={getPrintings(card.name, allCardsRaw)}
+            onAdd={(printingCardId, pendingQty) => handleAddCard(printingCardId, pendingQty)}
             onRemove={() => {
               removeCard(card.id);
               setSelectedCardId(null);

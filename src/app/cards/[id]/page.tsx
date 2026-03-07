@@ -45,10 +45,10 @@ export default async function CardPage({ params }: Props) {
 
   return (
     <div className="min-h-screen pt-14">
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
         <Link
           href="/cards"
-          className="inline-flex items-center gap-1 text-sm font-mono text-cyber-light/50 hover:text-cyber-yellow mb-6"
+          className="inline-flex items-center gap-1 text-base font-mono text-cyber-light/50 hover:text-cyber-yellow mb-8"
         >
           ← Back to Cards
         </Link>
@@ -58,19 +58,19 @@ export default async function CardPage({ params }: Props) {
         <div className="bg-cyber-dark border border-cyber-grey rounded-lg overflow-hidden">
           {/* Card header */}
           <div
-            className="p-6 border-b border-cyber-grey"
+            className="p-8 border-b border-cyber-grey"
             style={{
               background: `linear-gradient(135deg, ${colorHex}15, transparent)`,
             }}
           >
-            <div className="flex flex-col-reverse sm:flex-row items-start justify-between gap-4">
+            <div className="flex flex-col-reverse sm:flex-row items-start justify-between gap-6">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-cyber-light">
+                <h1 className="text-3xl sm:text-4xl font-bold text-cyber-light">
                   {card.name}
                 </h1>
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-3">
                   <span
-                    className="text-sm font-mono uppercase px-2 py-1 rounded"
+                    className="text-base font-mono uppercase px-2.5 py-1 rounded"
                     style={{
                       backgroundColor: `${colorHex}20`,
                       color: colorHex,
@@ -79,15 +79,15 @@ export default async function CardPage({ params }: Props) {
                     {card.card_type}
                   </span>
                   <span
-                    className="text-sm font-mono capitalize"
+                    className="text-base font-mono capitalize"
                     style={{ color: colorHex }}
                   >
                     {card.color}
                   </span>
-                  <span className="text-sm font-mono text-cyber-light/50">
+                  <span className="text-base font-mono text-cyber-light/50">
                     {rarityLabels[card.rarity]}
                   </span>
-                  <span className="text-sm font-mono text-cyber-light/30 capitalize">
+                  <span className="text-base font-mono text-cyber-light/30 capitalize">
                     {card.printing}
                   </span>
                 </div>
@@ -95,7 +95,7 @@ export default async function CardPage({ params }: Props) {
 
               {/* Card image */}
               <div
-                className="w-full sm:w-32 h-36 sm:h-44 rounded-lg border border-cyber-grey overflow-hidden shrink-0"
+                className="w-full sm:w-48 h-44 sm:h-64 rounded-lg border border-cyber-grey overflow-hidden shrink-0"
                 style={{
                   background: `linear-gradient(135deg, ${colorHex}20, ${colorHex}05)`,
                 }}
@@ -122,43 +122,43 @@ export default async function CardPage({ params }: Props) {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 border-b border-cyber-grey">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 p-8 border-b border-cyber-grey">
             {card.eddie_cost > 0 && (
               <div>
-                <div className="text-xs font-mono text-cyber-light/40 uppercase">
+                <div className="text-sm font-mono text-cyber-light/40 uppercase">
                   Eddie Cost
                 </div>
-                <div className="text-xl font-mono text-cyber-yellow">
+                <div className="text-2xl font-mono text-cyber-yellow">
                   {card.eddie_cost}
                 </div>
               </div>
             )}
             {card.ram_cost != null && (
               <div>
-                <div className="text-xs font-mono text-cyber-light/40 uppercase">
+                <div className="text-sm font-mono text-cyber-light/40 uppercase">
                   RAM Cost
                 </div>
-                <div className="text-xl font-mono text-cyber-cyan">
+                <div className="text-2xl font-mono text-cyber-cyan">
                   {card.ram_cost}
                 </div>
               </div>
             )}
             {card.ram_provided != null && (
               <div>
-                <div className="text-xs font-mono text-cyber-light/40 uppercase">
+                <div className="text-sm font-mono text-cyber-light/40 uppercase">
                   RAM Provided
                 </div>
-                <div className="text-xl font-mono text-cyber-cyan">
+                <div className="text-2xl font-mono text-cyber-cyan">
                   +{card.ram_provided}
                 </div>
               </div>
             )}
             {card.power != null && (
               <div>
-                <div className="text-xs font-mono text-cyber-light/40 uppercase">
+                <div className="text-sm font-mono text-cyber-light/40 uppercase">
                   Power
                 </div>
-                <div className="text-xl font-mono text-cyber-magenta">
+                <div className="text-2xl font-mono text-cyber-magenta">
                   {card.power}
                 </div>
               </div>
@@ -167,15 +167,15 @@ export default async function CardPage({ params }: Props) {
 
           {/* Classification */}
           {card.classification.length > 0 && (
-            <div className="px-6 pt-4">
-              <div className="text-xs font-mono text-cyber-light/40 uppercase mb-1">
+            <div className="px-8 pt-5">
+              <div className="text-sm font-mono text-cyber-light/40 uppercase mb-2">
                 Classification
               </div>
               <div className="flex gap-2">
                 {card.classification.map((cls) => (
                   <span
                     key={cls}
-                    className="text-xs font-mono px-2 py-1 bg-cyber-grey/50 rounded text-cyber-light/60"
+                    className="text-sm font-mono px-3 py-1.5 bg-cyber-grey/50 rounded text-cyber-light/60"
                   >
                     {cls}
                   </span>
@@ -186,15 +186,15 @@ export default async function CardPage({ params }: Props) {
 
           {/* Keywords */}
           {card.keywords.length > 0 && (
-            <div className="px-6 pt-4">
-              <div className="text-xs font-mono text-cyber-light/40 uppercase mb-1">
+            <div className="px-8 pt-5">
+              <div className="text-sm font-mono text-cyber-light/40 uppercase mb-2">
                 Keywords
               </div>
               <div className="flex gap-2">
                 {card.keywords.map((kw) => (
                   <span
                     key={kw}
-                    className="text-xs font-mono px-2 py-1 bg-cyber-grey rounded text-cyber-light/80"
+                    className="text-sm font-mono px-3 py-1.5 bg-cyber-grey rounded text-cyber-light/80"
                   >
                     {kw}
                   </span>
@@ -205,11 +205,11 @@ export default async function CardPage({ params }: Props) {
 
           {/* Ability text */}
           {card.ability_text && (
-            <div className="px-6 py-4">
-              <h2 className="text-xs font-mono text-cyber-light/40 uppercase mb-2">
+            <div className="px-8 py-5">
+              <h2 className="text-sm font-mono text-cyber-light/40 uppercase mb-3">
                 Ability
               </h2>
-              <p className="text-cyber-light leading-relaxed">
+              <p className="text-lg text-cyber-light leading-relaxed">
                 {card.ability_text}
               </p>
             </div>
@@ -217,15 +217,15 @@ export default async function CardPage({ params }: Props) {
 
           {/* Flavor text */}
           {card.flavor_text && (
-            <div className="px-6 pb-4">
-              <p className="text-sm italic text-cyber-light/40 border-l-2 border-cyber-grey pl-3">
+            <div className="px-8 pb-5">
+              <p className="text-base italic text-cyber-light/40 border-l-2 border-cyber-grey pl-4">
                 {card.flavor_text}
               </p>
             </div>
           )}
 
           {/* Meta */}
-          <div className="px-6 py-4 border-t border-cyber-grey flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono text-cyber-light/30">
+          <div className="px-8 py-5 border-t border-cyber-grey flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm font-mono text-cyber-light/30">
             <span>Set: {card.set_name} ({card.set_code})</span>
             {card.card_number && <span>#{card.card_number}</span>}
             {card.has_sell_tag && <span className="text-cyber-yellow/50">$ SELL</span>}

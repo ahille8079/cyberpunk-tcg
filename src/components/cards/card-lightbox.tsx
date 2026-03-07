@@ -62,7 +62,7 @@ export function CardLightbox({ imageUrl, alt, colorHex }: CardLightboxProps) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="w-full h-full cursor-zoom-in"
+        className="relative w-full h-full cursor-zoom-in group/lb"
         aria-label={`View ${alt} full size`}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -71,6 +71,25 @@ export function CardLightbox({ imageUrl, alt, colorHex }: CardLightboxProps) {
           alt={alt}
           className="w-full h-full object-cover"
         />
+        {/* Persistent expand badge */}
+        <div className="absolute bottom-2 right-2 bg-cyber-black/80 border border-cyber-cyan/50 rounded-md px-2.5 py-1 flex items-center gap-1.5 group-hover/lb:bg-cyber-cyan/20 group-hover/lb:border-cyber-cyan transition-all shadow-lg shadow-black/40">
+          <svg
+            className="w-3.5 h-3.5 text-cyber-cyan"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2.5}
+              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"
+            />
+          </svg>
+          <span className="text-[10px] font-mono text-cyber-cyan font-bold uppercase tracking-wider">
+            View
+          </span>
+        </div>
       </button>
 
       {open && (
