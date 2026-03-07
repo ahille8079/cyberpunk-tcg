@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/footer";
 import { CardsProvider } from "@/lib/cards/cards-provider";
 import { AuthProvider } from "@/lib/auth";
 import { MigrationBanner } from "@/components/auth/migration-banner";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -48,6 +49,7 @@ export default function RootLayout({
             <Footer />
           </CardsProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
