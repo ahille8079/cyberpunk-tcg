@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cards, getCardById, getPrintings } from "@/data/cards";
 import { PrintingSelector } from "@/components/cards/printing-selector";
+import { CardLightbox } from "@/components/cards/card-lightbox";
 import { COLOR_HEX } from "@/lib/utils";
 
 interface Props {
@@ -92,20 +93,30 @@ export default async function CardPage({ params }: Props) {
                 </div>
               </div>
 
-              {/* Image placeholder */}
+              {/* Card image */}
               <div
-                className="w-full sm:w-32 h-36 sm:h-44 rounded-lg border border-cyber-grey flex items-center justify-center text-5xl opacity-30 shrink-0"
+                className="w-full sm:w-32 h-36 sm:h-44 rounded-lg border border-cyber-grey overflow-hidden shrink-0"
                 style={{
                   background: `linear-gradient(135deg, ${colorHex}20, ${colorHex}05)`,
                 }}
               >
-                {card.card_type === "legend"
-                  ? "★"
-                  : card.card_type === "unit"
-                    ? "⚔"
-                    : card.card_type === "gear"
-                      ? "⚙"
-                      : "◈"}
+                {card.image_url ? (
+                  <CardLightbox
+                    imageUrl={card.image_url}
+                    alt={card.name}
+                    colorHex={colorHex}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-5xl opacity-30">
+                    {card.card_type === "legend"
+                      ? "★"
+                      : card.card_type === "unit"
+                        ? "⚔"
+                        : card.card_type === "gear"
+                          ? "⚙"
+                          : "◈"}
+                  </div>
+                )}
               </div>
             </div>
           </div>
