@@ -10,7 +10,6 @@ import { TipJarButton } from "@/components/tip-jar/tip-jar-button";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/cards", label: "Cards" },
-  { href: "/decks", label: "Decks" },
   { href: "/decks/new", label: "Build" },
 ];
 

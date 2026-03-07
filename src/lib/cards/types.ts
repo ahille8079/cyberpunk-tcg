@@ -56,6 +56,11 @@ export interface DeckCard {
   quantity: number;
 }
 
+export interface StashCard {
+  card_id: string;
+  quantity: number;
+}
+
 export interface DeckValidation {
   isValid: boolean;
   errors: string[];

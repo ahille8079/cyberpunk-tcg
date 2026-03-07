@@ -88,6 +88,13 @@ export function AuthButton() {
       {showDropdown && (
         <div className="absolute right-0 top-full mt-1 w-48 bg-cyber-dark border border-cyber-grey rounded-lg overflow-hidden shadow-lg shadow-black/50 z-50">
           <Link
+            href="/stash"
+            onClick={() => setShowDropdown(false)}
+            className="block px-4 py-3 text-sm font-mono text-cyber-light/70 hover:text-cyber-light hover:bg-white/5 transition-colors"
+          >
+            My Stash
+          </Link>
+          <Link
             href="/decks"
             onClick={() => setShowDropdown(false)}
             className="block px-4 py-3 text-sm font-mono text-cyber-light/70 hover:text-cyber-light hover:bg-white/5 transition-colors"
