@@ -1117,5 +1117,62 @@
     "created_at": "2025-01-01T00:00:00Z",
     "updated_at": "2025-01-01T00:00:00Z",
     "printing": "standard"
+  },
+  {
+    "id": "ms01-137",
+    "name": "Adam Smasher - Metal Over Meat",
+    "card_type": "unit",
+    "color": "yellow",
+    "ram_cost": 5,
+    "ram_provided": null,
+    "eddie_cost": 9,
+    "power": 15,
+    "has_sell_tag": false,
+    "street_cred_requirement": null,
+    "classification": [
+      "Arasaka",
+      "Merc"
+    ],
+    "keywords": [
+      "Play"
+    ],
+    "ability_text": "PLAY Defeat all other Units.",
+    "flavor_text": null,
+    "image_url": "https://gwupeldmdknkipmnuiwt.supabase.co/storage/v1/object/public/card-art/137.webp",
+    "set_code": "MS01",
+    "set_name": "Main Set 01",
+    "card_number": "137",
+    "rarity": "common",
+    "artist": "Łukasz Poller",
+    "created_at": "2025-01-01T00:00:00Z",
+    "updated_at": "2025-01-01T00:00:00Z",
+    "printing": "standard"
+  },
+  {
+    "id": "ms01-111",
+    "name": "Gorilla Arms",
+    "card_type": "gear",
+    "color": "yellow",
+    "ram_cost": 4,
+    "ram_provided": null,
+    "eddie_cost": 4,
+    "power": 4,
+    "has_sell_tag": true,
+    "street_cred_requirement": null,
+    "classification": [
+      "Cyberware"
+    ],
+    "keywords": [],
+    "ability_text": "(Equip to a Unit or face-up Legend.) The first time this Unit steals a Gig each turn, you may steal a rival Gig with the same number of sides.",
+    "flavor_text": null,
+    "image_url": "https://gwupeldmdknkipmnuiwt.supabase.co/storage/v1/object/public/card-art/111.webp",
+    "set_code": "MS01",
+    "set_name": "Main Set 01",
+    "card_number": "111",
+    "rarity": "common",
+    "artist": "TOPDOG",
+    "created_at": "2025-01-01T00:00:00Z",
+    "updated_at": "2025-01-01T00:00:00Z",
+    "printing": "standard"
   }
 ]

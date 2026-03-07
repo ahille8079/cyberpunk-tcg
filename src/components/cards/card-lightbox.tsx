@@ -10,6 +10,7 @@ interface CardLightboxProps {
 
 export function CardLightbox({ imageUrl, alt, colorHex }: CardLightboxProps) {
   const [open, setOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
 
@@ -57,6 +58,20 @@ export function CardLightbox({ imageUrl, alt, colorHex }: CardLightboxProps) {
     };
   }, [open]);
 
+  if (imgError) {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+        <div className="text-5xl" style={{ color: `${colorHex}40` }}>⚔</div>
+        <div
+          className="text-[10px] font-mono uppercase tracking-widest"
+          style={{ color: `${colorHex}30` }}
+        >
+          No Image
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <button
@@ -70,6 +85,7 @@ export function CardLightbox({ imageUrl, alt, colorHex }: CardLightboxProps) {
           src={imageUrl}
           alt={alt}
           className="w-full h-full object-cover"
+          onError={() => setImgError(true)}
         />
         {/* Persistent expand badge */}
         <div className="absolute bottom-2 right-2 bg-cyber-black/80 border border-cyber-cyan/50 rounded-md px-2.5 py-1 flex items-center gap-1.5 group-hover/lb:bg-cyber-cyan/20 group-hover/lb:border-cyber-cyan transition-all shadow-lg shadow-black/40">

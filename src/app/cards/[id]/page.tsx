@@ -107,14 +107,25 @@ export default async function CardPage({ params }: Props) {
                     colorHex={colorHex}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-5xl opacity-30">
-                    {card.card_type === "legend"
-                      ? "★"
-                      : card.card_type === "unit"
-                        ? "⚔"
-                        : card.card_type === "gear"
-                          ? "⚙"
-                          : "◈"}
+                  <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                    <div
+                      className="text-5xl"
+                      style={{ color: `${colorHex}40` }}
+                    >
+                      {card.card_type === "legend"
+                        ? "★"
+                        : card.card_type === "unit"
+                          ? "⚔"
+                          : card.card_type === "gear"
+                            ? "⚙"
+                            : "◈"}
+                    </div>
+                    <div
+                      className="text-[10px] font-mono uppercase tracking-widest"
+                      style={{ color: `${colorHex}30` }}
+                    >
+                      No Image
+                    </div>
                   </div>
                 )}
               </div>

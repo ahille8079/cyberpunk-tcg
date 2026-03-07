@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { cn, COLOR_HEX } from "@/lib/utils";
 import { colors } from "@/lib/design-tokens";
 import type { Card } from "@/lib/cards/types";
@@ -29,6 +30,7 @@ export function CardDisplay({
   interactive = true,
 }: CardDisplayProps) {
   const colorHex = COLOR_HEX[card.color] ?? "#d1d5db";
+  const [imgError, setImgError] = useState(false);
 
   return (
     <div
@@ -68,16 +70,28 @@ export function CardDisplay({
           background: `linear-gradient(135deg, ${colorHex}20, ${colorHex}05)`,
         }}
       >
-        {card.image_url ? (
+        {card.image_url && !imgError ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={card.image_url}
             alt={card.name}
             className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl opacity-20">
-            {typeIcons[card.card_type] ?? "?"}
+          <div className="w-full h-full flex flex-col items-center justify-center gap-1 px-2">
+            <div
+              className="text-3xl"
+              style={{ color: `${colorHex}40` }}
+            >
+              {typeIcons[card.card_type] ?? "?"}
+            </div>
+            <div
+              className="text-[9px] font-mono uppercase tracking-widest"
+              style={{ color: `${colorHex}30` }}
+            >
+              No Image
+            </div>
           </div>
         )}
 
